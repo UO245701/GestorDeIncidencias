@@ -1,6 +1,9 @@
-package View;
+package view;
 
 import javax.swing.*;
+
+import model.IncidenciaDisplayDTO;
+
 import java.awt.*;
 
 public class RegistrarIncidenciaView extends JFrame {

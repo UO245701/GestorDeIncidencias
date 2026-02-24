@@ -2,17 +2,6 @@
 DROP TABLE IF EXISTS Historial;
 DROP TABLE IF EXISTS Incidencia;
 DROP TABLE IF EXISTS Persona;
-DROP TABLE IF EXISTS Carreras;
-
-CREATE TABLE Carreras (
-    id INT PRIMARY KEY NOT NULL, 
-    inicio DATE NOT NULL, 
-    fin DATE NOT NULL, 
-    fecha DATE NOT NULL, 
-    descr VARCHAR(32), 
-    CHECK(inicio <= fin), 
-    CHECK(fin < fecha)
-);
 
 CREATE TABLE Persona (
     id_persona INTEGER PRIMARY KEY AUTOINCREMENT,

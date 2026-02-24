@@ -1,6 +1,9 @@
-package Controller;
+package controller;
 
 import giis.demo.util.ApplicationException;
+import model.IncidenciaDisplayDTO;
+import model.RegistrarIncidenciasModel;
+import view.RegistrarIncidenciaView;
 
 /**
  * Controller HU_33818 - Registrar Incidencia
@@ -8,10 +11,10 @@ import giis.demo.util.ApplicationException;
  */
 public class RegistrarIncidenciaController {
 
-	private IncidenciasModel model;
+	private RegistrarIncidenciasModel model;
 	private RegistrarIncidenciaView view;
 
-	public RegistrarIncidenciaController(IncidenciasModel model, RegistrarIncidenciaView view) {
+	public RegistrarIncidenciaController(RegistrarIncidenciasModel model, RegistrarIncidenciaView view) {
 		this.model = model;
 		this.view = view;
 		// NO inicializamos aquí; seguimos el patrón del ejemplo con initController()

@@ -1,80 +1,69 @@
 package giis.demo.util;
 
 import java.awt.EventQueue;
-import javax.swing.JFrame;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import controller.RegistrarIncidenciaController;
+import model.RegistrarIncidenciasModel;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import giis.demo.tkrun.*;
 
-/**
- * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 
- * de las aplicaciones de ejemplo
- * y acciones de inicializacion de la base de datos.
- * No sigue MVC pues es solamente temporal para que durante el desarrollo se tenga posibilidad
- * de realizar acciones de inicializacion
- */
+import view.RegistrarIncidenciaView;
+
 public class SwingMain {
 
 	private JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() { //NOSONAR codigo autogenerado
+		EventQueue.invokeLater(new Runnable() { //NOSONAR
 			public void run() {
 				try {
 					SwingMain window = new SwingMain();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace(); //NOSONAR codigo autogenerado
+					e.printStackTrace(); //NOSONAR
 				}
 			}
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public SwingMain() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Main");
-		frame.setBounds(0, 0, 287, 185);
+		frame.setBounds(0, 0, 360, 220);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		
-		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
-		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+
+		JButton btnRegistrarIncidencia = new JButton("Registrar incidencia");
+		btnRegistrarIncidencia.addActionListener(new ActionListener() { //NOSONAR
 			public void actionPerformed(ActionEvent e) {
-				CarrerasController controller=new CarrerasController(new CarrerasModel(), new CarrerasView());
+				RegistrarIncidenciaController controller =
+						new RegistrarIncidenciaController(new RegistrarIncidenciasModel(), new RegistrarIncidenciaView());
 				controller.initController();
 			}
 		});
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		frame.getContentPane().add(btnEjecutarTkrun);
-		
-			
+		frame.getContentPane().add(btnRegistrarIncidencia);
+
 		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
-		btnInicializarBaseDeDatos.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		btnInicializarBaseDeDatos.addActionListener(new ActionListener() { //NOSONAR
 			public void actionPerformed(ActionEvent e) {
-				Database db=new Database();
+				Database db = new Database();
 				db.createDatabase(false);
 			}
 		});
 		frame.getContentPane().add(btnInicializarBaseDeDatos);
-			
+
 		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales para Pruebas");
-		btnCargarDatosIniciales.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		btnCargarDatosIniciales.addActionListener(new ActionListener() { //NOSONAR
 			public void actionPerformed(ActionEvent e) {
-				Database db=new Database();
+				Database db = new Database();
 				db.createDatabase(false);
 				db.loadDatabase();
 			}
@@ -83,5 +72,4 @@ public class SwingMain {
 	}
 
 	public JFrame getFrame() { return this.frame; }
-	
 }
