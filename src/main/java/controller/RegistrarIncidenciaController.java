@@ -1,8 +1,8 @@
 package controller;
 
-import giis.demo.util.ApplicationException;
 import model.IncidenciaDisplayDTO;
 import model.RegistrarIncidenciasModel;
+import util.ApplicationException;
 import view.RegistrarIncidenciaView;
 
 /**

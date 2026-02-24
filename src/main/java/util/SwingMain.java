@@ -1,4 +1,4 @@
-package giis.demo.util;
+package util;
 
 import java.awt.EventQueue;
 import javax.swing.BoxLayout;

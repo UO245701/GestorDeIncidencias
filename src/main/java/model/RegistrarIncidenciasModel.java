@@ -2,8 +2,8 @@ package model;
 
 import java.util.List;
 
-import giis.demo.util.ApplicationException;
-import giis.demo.util.Database;
+import util.ApplicationException;
+import util.Database;
 
 /**
  * Modelo para la HU 33818 - Registrar Incidencia

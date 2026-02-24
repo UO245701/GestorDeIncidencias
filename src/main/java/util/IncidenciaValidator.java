@@ -1,4 +1,4 @@
-package giis.demo.util;
+package util;
 
 public class IncidenciaValidator {
 
