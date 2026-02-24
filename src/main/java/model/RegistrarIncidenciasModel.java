@@ -7,7 +7,7 @@ import util.Database;
 
 /**
  * Modelo para la HU 33818 - Registrar Incidencia
- * Sigue exactamente el mismo patrón que CarrerasModel
+ * Estilo CarrerasModel (una query por método, usando Database)
  */
 public class RegistrarIncidenciasModel {
 
@@ -31,7 +31,6 @@ public class RegistrarIncidenciasModel {
 		if (rows.isEmpty())
 			throw new ApplicationException("No existe un ciudadano identificado con ese usuario");
 
-		// OJO: el tipo puede venir como Integer/Long dependiendo del driver
 		Object value = rows.get(0)[0];
 		if (value instanceof Number) return ((Number) value).intValue();
 		return Integer.parseInt(value.toString());
@@ -58,7 +57,7 @@ public class RegistrarIncidenciasModel {
 	/**
 	 * Devuelve la última incidencia registrada por ese ciudadano para mostrar confirmación
 	 */
-	public model.IncidenciaDisplayDTO getUltimaIncidencia(String usuario) {
+	public IncidenciaDisplayDTO getUltimaIncidencia(String usuario) {
 		validateNotBlank(usuario, MSG_USUARIO_OBLIGATORIO);
 
 		String sql =
@@ -70,8 +69,8 @@ public class RegistrarIncidenciasModel {
 		  + "ORDER BY i.id DESC "
 		  + "LIMIT 1";
 
-		List<model.IncidenciaDisplayDTO> incidencias =
-				db.executeQueryPojo(model.IncidenciaDisplayDTO.class, sql, usuario.trim());
+		List<IncidenciaDisplayDTO> incidencias =
+				db.executeQueryPojo(IncidenciaDisplayDTO.class, sql, usuario.trim());
 
 		if (incidencias.isEmpty())
 			throw new ApplicationException("No se encontró la incidencia registrada");
