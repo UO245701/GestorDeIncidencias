@@ -97,6 +97,23 @@ public class IncidenciaEntity {
 	public void setCoste(Double coste) {
 		this.coste = coste;
 	}
+
+	public Integer getIdCiudadano() {
+		return idCiudadano;
+	}
+
+	public void setIdCiudadano(Integer idCiudadano) {
+		this.idCiudadano = idCiudadano;
+	}
+
+	public Integer getIdTecnico() {
+		return idTecnico;
+	}
+
+	public void setIdTecnico(Integer idTecnico) {
+		this.idTecnico = idTecnico;
+	}
     
+	
     
 }
