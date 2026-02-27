@@ -1,4 +1,3 @@
--- 1. Borrado en orden inverso 
 DROP TABLE IF EXISTS Historial;
 DROP TABLE IF EXISTS Incidencia;
 DROP TABLE IF EXISTS Persona;
@@ -10,7 +9,8 @@ CREATE TABLE Persona (
     tipo TEXT CHECK(tipo IN ('CIUDADANO', 'TECNICO', 'OPERADOR')),
     nombre TEXT,
     apellidos TEXT,
-    dni TEXT UNIQUE
+    dni TEXT UNIQUE,
+    email TEXT UNIQUE
 );
 
 CREATE TABLE Incidencia (

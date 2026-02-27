@@ -6,12 +6,15 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import controller.RegistrarIncidenciaController;
+import controller.ValidarIncidenciaController;
 import model.RegistrarIncidenciasModel;
+import model.ValidarIncidenciasModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import view.RegistrarIncidenciaView;
+import view.ValidarIncidenciaView;
 
 public class SwingMain {
 
@@ -69,6 +72,14 @@ public class SwingMain {
 			}
 		});
 		frame.getContentPane().add(btnCargarDatosIniciales);
+		
+		JButton btnValidar = new JButton("Validar Incidencias (Operador)");
+		btnValidar.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        new ValidarIncidenciaController(new ValidarIncidenciasModel(), new ValidarIncidenciaView()).initController();
+		    }
+		});
+		frame.getContentPane().add(btnValidar);
 	}
 
 	public JFrame getFrame() { return this.frame; }
