@@ -1,16 +1,18 @@
 --Datos para carga inicial de la base de datos
 delete from persona;
 
-INSERT INTO Persona (usuario, contrasena, tipo, nombre, apellidos, dni) VALUES 
-('paco_vecino', '1234', 'CIUDADANO', 'Francisco', 'García López', '12345678A'),
-('laura_op', 'admin', 'OPERADOR', 'Laura', 'Martínez Ruiz', '87654321B'),
-('rober_tech', 'tech123', 'TECNICO', 'Roberto', 'Sánchez Soler', '11223344C');
+INSERT INTO Persona (usuario, contrasena, tipo, nombre, apellidos, dni, email) VALUES 
+('paco_vecino', '1234', 'CIUDADANO', 'Francisco', 'García López', '12345678A', 'paco@correo.com'),
+('laura_op', 'admin', 'OPERADOR', 'Laura', 'Martínez Ruiz', '87654321B', 'laura@ayto.es'),
+('rober_tech', 'tech123', 'TECNICO', 'Roberto', 'Sánchez Soler', '11223344C', 'roberto@tech.es');
 
 delete from incidencia;
 
 -- 1. Incidencia recién creada por el ciudadano (ID 1)
-INSERT INTO Incidencia (tipo, descripcion, localizacion, estado, fk_ciudadano) 
-VALUES ('Calzada', 'Socavón peligroso en mitad de la calle', 'Calle Mayor 15', 'ABIERTA', 1);
+INSERT INTO Incidencia (tipo, descripcion, localizacion, estado, fk_ciudadano) VALUES 
+('Calzada', 'Socavón peligroso en mitad de la calle', 'Calle Mayor 15', 'ABIERTA', 1),
+('Calzada', 'Socavón peligroso en mitad de la calle 2', 'Calle Mayor 15', 'NUEVA', 1),
+('Calzada', 'Socavón peligroso en mitad de la calle 3', 'Calle Mayor 15', 'NUEVA', 1);
 
 -- 2. Incidencia ya asignada a un técnico (ID 3) por el ciudadano (ID 1)
 INSERT INTO Incidencia (tipo, descripcion, localizacion, estado, horas_estimadas, coste, fk_ciudadano, fk_tecnico) 

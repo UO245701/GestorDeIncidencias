@@ -113,7 +113,7 @@ public class RegistrarIncidenciaView extends JFrame {
         String text = ""
                 + "Incidencia registrada correctamente.\n\n"
                 + "ID: " + dto.getId() + "\n"
-                + "Fecha/Hora: " + dto.getFechaHora() + "\n"
+                + "Fecha/Hora: " + dto.getFechaHoraRegistro() + "\n"
                 + "Estado: " + dto.getEstado() + "\n"
                 + "Ciudadano: " + dto.getUsuarioCiudadano() + "\n"
                 + "Tipo: " + dto.getTipo() + "\n"

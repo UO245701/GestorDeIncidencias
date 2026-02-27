@@ -7,7 +7,7 @@ import util.Database;
 
 public class RegistrarIncidenciasModel {
 
-	private static final String MSG_USUARIO_OBLIGATORIO = "El usuario (correo o DNI) es obligatorio";
+	private static final String MSG_USUARIO_OBLIGATORIO = "El correo o DNI es obligatorio";
 	private static final String MSG_TIPO_OBLIGATORIO = "El tipo de incidencia es obligatorio";
 	private static final String MSG_DESCRIPCION_OBLIGATORIA = "La descripción es obligatoria";
 	private static final String MSG_LOCALIZACION_OBLIGATORIA = "La localización es obligatoria";
@@ -17,11 +17,11 @@ public class RegistrarIncidenciasModel {
 	public int getCiudadanoId(String identificador) {
 		validateNotBlank(identificador, MSG_USUARIO_OBLIGATORIO);
 
-		String sql = "SELECT id_persona FROM Persona WHERE (usuario=? OR dni=?) AND tipo='CIUDADANO'";
+		String sql = "SELECT id_persona FROM Persona WHERE (email=? OR dni=?) AND tipo='CIUDADANO'";
 		List<Object[]> rows = db.executeQueryArray(sql, identificador.trim(), identificador.trim());
 
 		if (rows.isEmpty()) {
-			throw new ApplicationException("No existe un ciudadano identificado con ese usuario/DNI");
+			throw new ApplicationException("No existe un ciudadano identificado con ese correo/DNI");
 		}
 
 		Object value = rows.get(0)[0];
@@ -49,10 +49,10 @@ public class RegistrarIncidenciasModel {
 		validateNotBlank(identificador, MSG_USUARIO_OBLIGATORIO);
 
 		String sql = "SELECT i.id_incidencia as id, i.tipo as tipo, i.descripcion as descripcion, i.localizacion as localizacion, "
-				+ "i.fecha_hora as fechaHora, i.estado as estado, p.usuario as usuarioCiudadano "
+				+ "i.fecha_hora as fechaHoraRegistro, i.estado as estado, p.email as usuarioCiudadano "
 				+ "FROM Incidencia i "
 				+ "JOIN Persona p ON p.id_persona = i.fk_ciudadano "
-				+ "WHERE (p.usuario=? OR p.dni=?) "
+				+ "WHERE (p.email=? OR p.dni=?) "
 				+ "ORDER BY i.id_incidencia DESC "
 				+ "LIMIT 1";
 
