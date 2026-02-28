@@ -10,13 +10,13 @@ delete from incidencia;
 
 -- 1. Incidencia recién creada por el ciudadano (ID 1)
 INSERT INTO Incidencia (tipo, descripcion, localizacion, estado, fk_ciudadano) VALUES 
-('Bache', 'Socavón peligroso en mitad de la calle', 'Calle Mayor 15', 'ABIERTA', 1),
-('Bache', 'Socavón peligroso en mitad de la calle 2', 'Calle Mayor 15', 'NUEVA', 1),
-('Bache', 'Socavón peligroso en mitad de la calle 3', 'Calle Mayor 15', 'NUEVA', 1);
+('Calzada', 'Socavón peligroso en mitad de la calle', 'Calle Mayor 15', 'ABIERTA', 1),
+('Calzada', 'Socavón peligroso en mitad de la calle 2', 'Calle Mayor 15', 'NUEVA', 1),
+('Calzada', 'Socavón peligroso en mitad de la calle 3', 'Calle Mayor 15', 'NUEVA', 1);
 
 -- 2. Incidencia ya asignada a un técnico (ID 3) por el ciudadano (ID 1)
 INSERT INTO Incidencia (tipo, descripcion, localizacion, estado, horas_estimadas, coste, fk_ciudadano, fk_tecnico) 
-VALUES ('Farola', 'Farola fundida hace una semana', 'Plaza España', 'ASIGNADA', 2.5, 45.0, 1, 3);
+VALUES ('Alumbrado', 'Farola fundida hace una semana', 'Plaza España', 'ASIGNADA', 2.5, 45.0, 1, 3);
 
 -- 3. Incidencia resuelta
 INSERT INTO Incidencia (tipo, descripcion, localizacion, estado, horas_estimadas, coste, fk_ciudadano, fk_tecnico) 
