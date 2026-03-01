@@ -25,7 +25,7 @@ public class RegistrarIncidenciasModel {
 	public int getCiudadanoId(String usuario) {
 		validateNotBlank(usuario, MSG_USUARIO_OBLIGATORIO);
 
-		String sql = "SELECT id FROM persona WHERE usuario=? AND tipo='CIUDADANO'";
+		String sql = "SELECT id_persona FROM persona WHERE usuario=? AND tipo='CIUDADANO'";
 		List<Object[]> rows = db.executeQueryArray(sql, usuario.trim());
 
 		if (rows.isEmpty())
@@ -49,8 +49,8 @@ public class RegistrarIncidenciasModel {
 
 		int ciudadanoId = getCiudadanoId(usuario);
 
-		String sql = "INSERT INTO incidencia(tipo, descripcion, localizacion, fecha_hora_registro, estado, ciudadano_id) "
-				+ "VALUES (?, ?, ?, datetime('now'), 'Nueva', ?)";
+		String sql = "INSERT INTO Incidencia(tipo, descripcion, localizacion, fecha_hora, estado, fk_ciudadano) "
+				+ "VALUES (?, ?, ?, datetime('now'), 'ABIERTA', ?)";
 
 		db.executeUpdate(sql, tipo.trim(), descripcion.trim(), localizacion.trim(), ciudadanoId);
 	}
@@ -62,13 +62,13 @@ public class RegistrarIncidenciasModel {
 		validateNotBlank(usuario, MSG_USUARIO_OBLIGATORIO);
 
 		String sql =
-			"SELECT i.id as id, i.tipo as tipo, i.descripcion as descripcion, i.localizacion as localizacion, "
-		  + "       i.fecha_hora_registro as fechaHoraRegistro, i.estado as estado, p.usuario as usuarioCiudadano "
-		  + "FROM incidencia i "
-		  + "JOIN persona p ON p.id = i.ciudadano_id "
-		  + "WHERE p.usuario=? "
-		  + "ORDER BY i.id DESC "
-		  + "LIMIT 1";
+				"SELECT i.id_incidencia as id, i.tipo as tipo, i.descripcion as descripcion, i.localizacion as localizacion, "
+			  + "       i.fecha_hora as fechaHoraRegistro, i.estado as estado, p.usuario as usuarioCiudadano "
+			  + "FROM Incidencia i "
+			  + "JOIN Persona p ON p.id_persona = i.fk_ciudadano "
+			  + "WHERE p.usuario=? "
+			  + "ORDER BY i.fecha_hora DESC "
+			  + "LIMIT 1";
 
 		List<model.IncidenciaDisplayDTO> incidencias =
 				db.executeQueryPojo(model.IncidenciaDisplayDTO.class, sql, usuario.trim());

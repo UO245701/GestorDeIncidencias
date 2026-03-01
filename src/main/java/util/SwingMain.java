@@ -13,6 +13,10 @@ import java.awt.event.ActionEvent;
 
 import view.RegistrarIncidenciaView;
 
+import controller.ConsultarIncidenciasController;
+import model.ConsultarIncidenciasModel;
+import view.ConsultarIncidenciasView;
+
 public class SwingMain {
 
 	private JFrame frame;
@@ -49,6 +53,17 @@ public class SwingMain {
 				controller.initController();
 			}
 		});
+		
+		JButton btnConsultarMisIncidencias = new JButton("Consultar mis incidencias");
+		btnConsultarMisIncidencias.addActionListener(new ActionListener() { //NOSONAR
+			public void actionPerformed(ActionEvent e) {
+				ConsultarIncidenciasController controller =
+						new ConsultarIncidenciasController(new ConsultarIncidenciasModel(), new ConsultarIncidenciasView());
+				controller.initController();
+			}
+		});
+		
+		frame.getContentPane().add(btnConsultarMisIncidencias);
 		frame.getContentPane().add(btnRegistrarIncidencia);
 
 		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
