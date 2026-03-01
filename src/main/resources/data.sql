@@ -22,6 +22,17 @@ VALUES ('Alumbrado', 'Farola fundida hace una semana', 'Plaza España', 'ASIGNAD
 INSERT INTO Incidencia (tipo, descripcion, localizacion, estado, horas_estimadas, coste, fk_ciudadano, fk_tecnico) 
 VALUES ('Limpieza', 'Grafitis en la fachada del centro cultural', 'Av. Libertad s/n', 'RESUELTA', 4.0, 120.0, 1, 3);
 
+-- Incidencias VALIDADA (las que se pueden asignar por el operador)
+-- (fk_ciudadano = 1 -> paco_vecino)
+
+INSERT INTO Incidencia (tipo, descripcion, localizacion, estado, fk_ciudadano) VALUES
+('Alumbrado', 'Farola parpadeando por la noche', 'Calle Luna 8', 'VALIDADA', 1),
+('Limpieza', 'Contenedor desbordado y suciedad alrededor', 'Av. Constitución 22', 'VALIDADA', 1),
+('Mobiliario urbano', 'Banco roto con tornillos sueltos', 'Parque Central', 'VALIDADA', 1),
+('Zonas verdes', 'Árbol caído bloqueando el paso', 'Paseo del Río', 'VALIDADA', 1),
+('Señalización', 'Señal de STOP doblada y casi caída', 'Cruce Av. Norte con Calle Sur', 'VALIDADA', 1),
+('Calzada', 'Bache profundo en carril derecho', 'Ronda Oeste km 2', 'VALIDADA', 1);
+
  delete from historial;
  -- El Ciudadano crea la incidencia
 INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) 
