@@ -10,7 +10,7 @@ public class RegistrarIncidenciaView extends JFrame {
 
     private final JTextField txtUsuario = new JTextField(25);
     private final JComboBox<String> cbTipo = new JComboBox<>(new String[] {
-            "", "alumbrado", "limpieza", "mobiliario urbano", "zonas verdes", "señalización", "calzada"
+            "", "Alumbrado", "Limpieza", "Mobiliario urbano", "Zonas verdes", "Señalización", "Calzada"
     });
     private final JTextArea txtDescripcion = new JTextArea(5, 30);
     private final JTextField txtLocalizacion = new JTextField(30);

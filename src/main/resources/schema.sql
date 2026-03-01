@@ -1,4 +1,3 @@
--- 1. Borrado en orden inverso 
 DROP TABLE IF EXISTS Historial;
 DROP TABLE IF EXISTS Incidencia;
 DROP TABLE IF EXISTS Persona;
@@ -10,7 +9,8 @@ CREATE TABLE Persona (
     tipo TEXT CHECK(tipo IN ('CIUDADANO', 'TECNICO', 'OPERADOR')),
     nombre TEXT,
     apellidos TEXT,
-    dni TEXT UNIQUE
+    dni TEXT UNIQUE,
+    email TEXT UNIQUE
 );
 
 CREATE TABLE Incidencia (
@@ -18,7 +18,7 @@ CREATE TABLE Incidencia (
     tipo TEXT,
     descripcion TEXT,
     localizacion TEXT,
-    fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_hora DATETIME DEFAULT (datetime('now','localtime')),
     estado TEXT, 
     horas_estimadas REAL,
     coste REAL,
@@ -30,7 +30,7 @@ CREATE TABLE Incidencia (
 
 CREATE TABLE Historial (
     id_historial INTEGER PRIMARY KEY AUTOINCREMENT,
-    fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_hora DATETIME DEFAULT (datetime('now','localtime')),
     estado TEXT,
     accion TEXT,
     detalle TEXT,
