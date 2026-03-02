@@ -47,7 +47,7 @@ public class ConsultarIncidenciasView extends JFrame {
 	}
 
 	private void buildUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JPanel form = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
