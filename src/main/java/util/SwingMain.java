@@ -5,9 +5,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import controller.AsignarIncidenciaController;
 import controller.RegistrarIncidenciaController;
 import controller.ValidarIncidenciaController;
+
 import controller.VisualizarHistorialController;
+import model.AsignarIncidenciaModel;
 import model.RegistrarIncidenciasModel;
 import model.ValidarIncidenciasModel;
 import model.VisualizarHistorialModel;
@@ -15,6 +18,7 @@ import model.VisualizarHistorialModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import view.AsignarIncidenciaView;
 import view.RegistrarIncidenciaView;
 import view.ValidarIncidenciaView;
 import view.VisualizarHistorialView;
@@ -109,6 +113,16 @@ public class SwingMain {
 		    }
 		});
 		frame.getContentPane().add(btnValidar);
+		
+		JButton btnAsignarIncidencia = new JButton("Asignar incidencia");
+		btnAsignarIncidencia.addActionListener(new ActionListener() { //NOSONAR
+			public void actionPerformed(ActionEvent e) {
+				AsignarIncidenciaController controller =
+						new AsignarIncidenciaController(new AsignarIncidenciaModel(), new AsignarIncidenciaView());
+				controller.initController();
+			}
+		});
+		frame.getContentPane().add(btnAsignarIncidencia);
 	}
 
 	public JFrame getFrame() { return this.frame; }
