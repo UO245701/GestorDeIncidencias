@@ -7,11 +7,13 @@ import javax.swing.JFrame;
 
 import controller.AsignarIncidenciaController;
 import controller.RegistrarIncidenciaController;
+import controller.TecnicoController;
 import controller.ValidarIncidenciaController;
 
 import controller.VisualizarHistorialController;
 import model.AsignarIncidenciaModel;
 import model.RegistrarIncidenciasModel;
+import model.TecnicoModel;
 import model.ValidarIncidenciasModel;
 import model.VisualizarHistorialModel;
 
@@ -20,6 +22,7 @@ import java.awt.event.ActionEvent;
 
 import view.AsignarIncidenciaView;
 import view.RegistrarIncidenciaView;
+import view.TecnicoView;
 import view.ValidarIncidenciaView;
 import view.VisualizarHistorialView;
 
@@ -52,7 +55,7 @@ public class SwingMain {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Main");
-		frame.setBounds(0, 0, 360, 220);
+		frame.setBounds(0, 0, 400, 250);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 
@@ -123,6 +126,14 @@ public class SwingMain {
 			}
 		});
 		frame.getContentPane().add(btnAsignarIncidencia);
+
+		JButton btnTecnico = new JButton("Abrir Panel de Técnico");
+		btnTecnico.addActionListener(e -> {
+		    TecnicoView v = new TecnicoView();
+		    TecnicoModel m = new TecnicoModel();
+		    new TecnicoController(m, v).initController();
+		});
+		frame.getContentPane().add(btnTecnico);
 	}
 
 	public JFrame getFrame() { return this.frame; }

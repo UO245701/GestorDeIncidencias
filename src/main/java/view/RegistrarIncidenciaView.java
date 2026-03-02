@@ -25,7 +25,7 @@ public class RegistrarIncidenciaView extends JFrame {
     }
 
     private void buildUI() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         txtDescripcion.setLineWrap(true);
         txtDescripcion.setWrapStyleWord(true);
