@@ -49,12 +49,11 @@ public class AsignarIncidenciaModel {
 	/**
 	 * Registrar cambio en historial (quien cambia = operador)
 	 */
-	public void registrarEnHistorial(int idIncidencia, int idOperador, int idTecnico) {
-		String detalle = "Incidencia asignada a técnico id=" + idTecnico;
-		String sql =
-			"INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) " +
-			"VALUES ('ASIGNADA', 'ASIGNACION', ?, ?, ?)";
-		db.executeUpdate(sql, detalle, idIncidencia, idOperador);
+	public void registrarEnHistorial(int idIncidencia, int idOperador, String detalle) {
+	    String sql =
+	        "INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) " +
+	        "VALUES ('ASIGNADA', 'ASIGNACION', ?, ?, ?)";
+	    db.executeUpdate(sql, detalle, idIncidencia, idOperador);
 	}
 
 	/**

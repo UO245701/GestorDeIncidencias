@@ -71,15 +71,19 @@ public class AsignarIncidenciaController {
 
 		int idIncidencia = Integer.parseInt(view.getTablaIncidencias().getValueAt(rowInc, 0).toString());
 		int idTecnico = Integer.parseInt(view.getTablaTecnicos().getValueAt(rowTec, 0).toString());
+		String nombreTecnico = view.getTablaTecnicos().getValueAt(rowTec, 2).toString();
+		String nombreOperadora = operadorActual.getNombre();
+		String detalleHistorial = "La operadora " + nombreOperadora +
+		                           " asignó el trabajo a " + nombreTecnico;
 
 		// 1) Asignar
 		model.asignarIncidencia(idIncidencia, idTecnico);
 
 		// 2) Historial (operadorActual.getId() existe en tu PersonaEntity)
-		model.registrarEnHistorial(idIncidencia, operadorActual.getId(), idTecnico);
+		model.registrarEnHistorial(idIncidencia, operadorActual.getId(), detalleHistorial);
 
 		JOptionPane.showMessageDialog(view,
-				"Incidencia " + idIncidencia + " asignada correctamente al técnico " + idTecnico);
+				"Incidencia " + idIncidencia + " asignada correctamente al técnico " + nombreTecnico);
 
 		// refrescar
 		cargarDatos();
