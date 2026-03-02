@@ -8,9 +8,12 @@ import javax.swing.JFrame;
 import controller.AsignarIncidenciaController;
 import controller.RegistrarIncidenciaController;
 import controller.ValidarIncidenciaController;
+
+import controller.VisualizarHistorialController;
 import model.AsignarIncidenciaModel;
 import model.RegistrarIncidenciasModel;
 import model.ValidarIncidenciasModel;
+import model.VisualizarHistorialModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -18,10 +21,12 @@ import java.awt.event.ActionEvent;
 import view.AsignarIncidenciaView;
 import view.RegistrarIncidenciaView;
 import view.ValidarIncidenciaView;
+import view.VisualizarHistorialView;
 
 import controller.ConsultarIncidenciasController;
 import model.ConsultarIncidenciasModel;
 import view.ConsultarIncidenciasView;
+
 
 public class SwingMain {
 
@@ -68,6 +73,16 @@ public class SwingMain {
 				controller.initController();
 			}
 		});
+		
+		JButton btnHistorial = new JButton("Visualizar historial");
+		btnHistorial.addActionListener(e -> {
+		    VisualizarHistorialController controller =
+		        new VisualizarHistorialController(
+		            new VisualizarHistorialModel(),
+		            new VisualizarHistorialView());
+		    controller.initController();
+		});
+		frame.getContentPane().add(btnHistorial);
 		
 		frame.getContentPane().add(btnConsultarMisIncidencias);
 		frame.getContentPane().add(btnRegistrarIncidencia);

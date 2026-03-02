@@ -21,7 +21,7 @@ public class ConsultarIncidenciasModel {
 		String sql = ""
 				+ "SELECT id_persona "
 				+ "FROM Persona "
-				+ "WHERE tipo='CIUDADANO' AND (usuario=? OR dni=?)";
+				+ "WHERE tipo='CIUDADANO' AND (email=? OR dni=?)";
 
 		String id = identificador.trim();
 		List<Object[]> rows = db.executeQueryArray(sql, id, id);
