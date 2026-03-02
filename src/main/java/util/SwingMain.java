@@ -7,9 +7,11 @@ import javax.swing.JFrame;
 
 import controller.AsignarIncidenciaController;
 import controller.RegistrarIncidenciaController;
+import controller.TecnicoController;
 import controller.ValidarIncidenciaController;
 import model.AsignarIncidenciaModel;
 import model.RegistrarIncidenciasModel;
+import model.TecnicoModel;
 import model.ValidarIncidenciasModel;
 
 import java.awt.event.ActionListener;
@@ -17,6 +19,7 @@ import java.awt.event.ActionEvent;
 
 import view.AsignarIncidenciaView;
 import view.RegistrarIncidenciaView;
+import view.TecnicoView;
 import view.ValidarIncidenciaView;
 
 import controller.ConsultarIncidenciasController;
@@ -108,6 +111,14 @@ public class SwingMain {
 			}
 		});
 		frame.getContentPane().add(btnAsignarIncidencia);
+
+		JButton btnTecnico = new JButton("Abrir Panel de Técnico");
+		btnTecnico.addActionListener(e -> {
+		    TecnicoView v = new TecnicoView();
+		    TecnicoModel m = new TecnicoModel();
+		    new TecnicoController(m, v).initController();
+		});
+		frame.getContentPane().add(btnTecnico);
 	}
 
 	public JFrame getFrame() { return this.frame; }

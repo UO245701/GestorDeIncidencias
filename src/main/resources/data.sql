@@ -50,3 +50,12 @@ VALUES ('ASIGNADA', 'ASIGNACION', 'La operadora Laura asignó el trabajo a Rober
 -- El historial de la incidencia resuelta (ID 3)
 INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) 
 VALUES ('RESUELTA', 'FINALIZACION', 'Trabajo de limpieza completado con éxito', 3, 3);
+
+
+-- 1. Asegúrate de que existe el técnico Roberto
+INSERT OR IGNORE INTO Persona (usuario, contrasena, tipo, nombre, apellidos, dni, email) 
+VALUES ('rober_tech', '1234', 'TECNICO', 'Roberto', 'Sánchez', '11223344C', 'roberto@tech.es');
+
+-- 2. Pon una incidencia en estado VALIDADA y asígnasela a Roberto (ID del técnico)
+-- Primero mira qué ID tiene Roberto: SELECT id_persona FROM Persona WHERE email = 'roberto@tech.es';
+UPDATE Incidencia SET estado = 'VALIDADA', fk_tecnico = (SELECT id_persona FROM Persona WHERE email = 'roberto@tech.es') WHERE id_incidencia = 2;
