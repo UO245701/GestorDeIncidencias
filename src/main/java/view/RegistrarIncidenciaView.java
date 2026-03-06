@@ -9,6 +9,8 @@ import java.awt.*;
 public class RegistrarIncidenciaView extends JFrame {
 
     private final JTextField txtUsuario = new JTextField(25);
+    private final JButton btnValidarUsuario = new JButton("Validar usuario");
+
     private final JComboBox<String> cbTipo = new JComboBox<>(new String[] {
             "", "Alumbrado", "Limpieza", "Mobiliario urbano", "Zonas verdes", "Señalización", "Calzada"
     });
@@ -22,6 +24,7 @@ public class RegistrarIncidenciaView extends JFrame {
     public RegistrarIncidenciaView() {
         super("Gestor de incidencias - Registrar incidencia");
         buildUI();
+        deshabilitarFormularioIncidencia();
     }
 
     private void buildUI() {
@@ -42,36 +45,60 @@ public class RegistrarIncidenciaView extends JFrame {
         int y = 0;
 
         // Usuario
-        gbc.gridx = 0; gbc.gridy = y; gbc.weightx = 0;
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        gbc.weightx = 0;
         form.add(new JLabel("Correo o DNI:"), gbc);
-        gbc.gridx = 1; gbc.gridy = y; gbc.weightx = 1;
-        form.add(txtUsuario, gbc);
+
+        JPanel panelUsuario = new JPanel(new BorderLayout(5, 0));
+        panelUsuario.add(txtUsuario, BorderLayout.CENTER);
+        panelUsuario.add(btnValidarUsuario, BorderLayout.EAST);
+
+        gbc.gridx = 1;
+        gbc.gridy = y;
+        gbc.weightx = 1;
+        form.add(panelUsuario, gbc);
         y++;
 
         // Tipo
-        gbc.gridx = 0; gbc.gridy = y; gbc.weightx = 0;
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        gbc.weightx = 0;
         form.add(new JLabel("Tipo incidencia:"), gbc);
-        gbc.gridx = 1; gbc.gridy = y; gbc.weightx = 1;
+
+        gbc.gridx = 1;
+        gbc.gridy = y;
+        gbc.weightx = 1;
         form.add(cbTipo, gbc);
         y++;
 
         // Descripción
-        gbc.gridx = 0; gbc.gridy = y; gbc.weightx = 0;
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        gbc.weightx = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         form.add(new JLabel("Descripción:"), gbc);
-        gbc.gridx = 1; gbc.gridy = y; gbc.weightx = 1;
+
+        gbc.gridx = 1;
+        gbc.gridy = y;
+        gbc.weightx = 1;
         form.add(new JScrollPane(txtDescripcion), gbc);
         y++;
 
         // Localización
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        gbc.weightx = 0;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.gridx = 0; gbc.gridy = y; gbc.weightx = 0;
         form.add(new JLabel("Localización:"), gbc);
-        gbc.gridx = 1; gbc.gridy = y; gbc.weightx = 1;
+
+        gbc.gridx = 1;
+        gbc.gridy = y;
+        gbc.weightx = 1;
         form.add(txtLocalizacion, gbc);
         y++;
 
-        // Botón
+        // Botón registrar
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttons.add(btnRegistrar);
 
@@ -91,14 +118,58 @@ public class RegistrarIncidenciaView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    // Getters para el Controller
-    public String getUsuario() { return txtUsuario.getText(); }
-    public String getTipo() { return (String) cbTipo.getSelectedItem(); }
-    public String getDescripcion() { return txtDescripcion.getText(); }
-    public String getLocalizacion() { return txtLocalizacion.getText(); }
+    public String getUsuario() {
+        return txtUsuario.getText();
+    }
+
+    public String getTipo() {
+        return (String) cbTipo.getSelectedItem();
+    }
+
+    public String getDescripcion() {
+        return txtDescripcion.getText();
+    }
+
+    public String getLocalizacion() {
+        return txtLocalizacion.getText();
+    }
+
+    public void addValidarUsuarioListener(Runnable action) {
+        btnValidarUsuario.addActionListener(e -> action.run());
+    }
 
     public void addRegistrarListener(Runnable action) {
         btnRegistrar.addActionListener(e -> action.run());
+    }
+
+    public void habilitarFormularioIncidencia() {
+        cbTipo.setEnabled(true);
+        txtDescripcion.setEnabled(true);
+        txtLocalizacion.setEnabled(true);
+        btnRegistrar.setEnabled(true);
+    }
+
+    public void deshabilitarFormularioIncidencia() {
+        cbTipo.setEnabled(false);
+        txtDescripcion.setEnabled(false);
+        txtLocalizacion.setEnabled(false);
+        btnRegistrar.setEnabled(false);
+    }
+
+    public void limpiarFormularioIncidencia() {
+        cbTipo.setSelectedIndex(0);
+        txtDescripcion.setText("");
+        txtLocalizacion.setText("");
+    }
+
+    public void bloquearUsuarioValidado() {
+        txtUsuario.setEnabled(false);
+        btnValidarUsuario.setEnabled(false);
+    }
+
+    public void desbloquearUsuario() {
+        txtUsuario.setEnabled(true);
+        btnValidarUsuario.setEnabled(true);
     }
 
     public void showError(String msg) {
@@ -106,7 +177,7 @@ public class RegistrarIncidenciaView extends JFrame {
     }
 
     public void showInfo(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "OK", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, msg, "Información", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void showConfirmacion(IncidenciaDisplayDTO dto) {

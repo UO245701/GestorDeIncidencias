@@ -14,7 +14,7 @@ delete from incidencia;
 
 -- 1. Incidencia recién creada por el ciudadano (ID 1)
 INSERT INTO Incidencia (tipo, descripcion, localizacion, estado, fk_ciudadano) VALUES 
-('Calzada', 'Socavón peligroso en mitad de la calle', 'Calle Mayor 15', 'ABIERTA', 1),
+('Calzada', 'Socavón peligroso en mitad de la calle', 'Calle Mayor 15', 'NUEVA', 1),
 ('Calzada', 'Socavón peligroso en mitad de la calle 2', 'Calle Mayor 15', 'NUEVA', 1),
 ('Calzada', 'Socavón peligroso en mitad de la calle 3', 'Calle Mayor 15', 'NUEVA', 1);
 
@@ -41,7 +41,7 @@ INSERT INTO Incidencia
  delete from historial;
  -- El Ciudadano crea la incidencia
 INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) 
-VALUES ('ABIERTA', 'CREACION', 'El ciudadano registró el aviso', 2, 1);
+VALUES ('NUEVA', 'CREACION', 'El ciudadano registró el aviso', 2, 1);
 
 -- La Operadora (ID 2) la asigna al Técnico (ID 3)
 INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) 

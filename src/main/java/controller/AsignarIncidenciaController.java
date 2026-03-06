@@ -75,6 +75,9 @@ public class AsignarIncidenciaController {
 		String nombreOperadora = operadorActual.getNombre();
 		String detalleHistorial = "La operadora " + nombreOperadora +
 		                           " asignó el trabajo a " + nombreTecnico;
+		String tipoIncidencia = view.getTablaIncidencias().getValueAt(rowInc, 1).toString();
+		String localizacion = view.getTablaIncidencias().getValueAt(rowInc, 3).toString();
+		String horaAsignacion = java.time.LocalTime.now().withNano(0).toString();
 
 		// 1) Asignar
 		model.asignarIncidencia(idIncidencia, idTecnico);
@@ -83,7 +86,14 @@ public class AsignarIncidenciaController {
 		model.registrarEnHistorial(idIncidencia, operadorActual.getId(), detalleHistorial);
 
 		JOptionPane.showMessageDialog(view,
-				"Incidencia " + idIncidencia + " asignada correctamente al técnico " + nombreTecnico);
+		        "Incidencia " + idIncidencia +
+		        " (" + tipoIncidencia + ") asignada correctamente.\n\n" +
+		        "Técnico: " + nombreTecnico + "\n" +
+		        "Localización: " + localizacion + "\n" +
+		        "Operadora: " + nombreOperadora + "\n" +
+		        "Hora de asignación: " + horaAsignacion,
+		        "Asignación realizada",
+		        JOptionPane.INFORMATION_MESSAGE);
 
 		// refrescar
 		cargarDatos();
