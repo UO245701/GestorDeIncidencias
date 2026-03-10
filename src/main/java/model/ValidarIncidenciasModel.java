@@ -11,10 +11,11 @@ public class ValidarIncidenciasModel {
 	 * Se usa el DTO para incluir el nombre del ciudadano haciendo un JOIN.
 	 */
 	public List<IncidenciaDisplayDTO> getIncidenciasNuevas() {
-		String sql = "SELECT i.id_incidencia as id, i.tipo, i.descripcion, i.localizacion, " +
+		String sql = "SELECT i.id_incidencia as id, i.tipo, i.descripcion, z.nombre as localizacion, " +
 				     "i.fecha_hora as fechaHoraRegistro, i.estado, p.usuario as usuarioCiudadano " +
 				     "FROM Incidencia i " +
 				     "JOIN Persona p ON i.fk_ciudadano = p.id_persona " +
+				     "JOIN Zona z ON i.fk_zona = z.id_zona " +
 				     "WHERE i.estado = 'NUEVA'";
 		return db.executeQueryPojo(IncidenciaDisplayDTO.class, sql);
 	}

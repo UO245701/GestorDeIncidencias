@@ -9,14 +9,15 @@ public class AsignarIncidenciaModel {
 
 	/**
 	 * Incidencias asignables: estado 'VALIDADA' ordenadas por fecha (antiguas primero).
-	 * Usamos IncidenciaDisplayDTO (JOIN con Persona para sacar usuarioCiudadano).
+	 * Usamos IncidenciaDisplayDTO y mostramos el nombre de la zona como localizacion.
 	 */
 	public List<IncidenciaDisplayDTO> getIncidenciasValidadas() {
 		String sql =
-			"SELECT i.id_incidencia as id, i.tipo, i.descripcion, i.localizacion, " +
+			"SELECT i.id_incidencia as id, i.tipo, i.descripcion, z.nombre as localizacion, " +
 			"i.fecha_hora as fechaHoraRegistro, i.estado, p.usuario as usuarioCiudadano " +
 			"FROM Incidencia i " +
 			"JOIN Persona p ON i.fk_ciudadano = p.id_persona " +
+			"JOIN Zona z ON i.fk_zona = z.id_zona " +
 			"WHERE i.estado = 'VALIDADA' " +
 			"ORDER BY i.fecha_hora ASC";
 		return db.executeQueryPojo(IncidenciaDisplayDTO.class, sql);
@@ -57,7 +58,7 @@ public class AsignarIncidenciaModel {
 	}
 
 	/**
-	 * Obtener operador por email (igual que tu compi)
+	 * Obtener operador por email
 	 */
 	public PersonaEntity getOperadorByEmail(String email) {
 		String sql =

@@ -5,6 +5,7 @@ import javax.swing.*;
 import model.IncidenciaDisplayDTO;
 
 import java.awt.*;
+import java.util.List;
 
 public class RegistrarIncidenciaView extends JFrame {
 
@@ -14,8 +15,10 @@ public class RegistrarIncidenciaView extends JFrame {
     private final JComboBox<String> cbTipo = new JComboBox<>(new String[] {
             "", "Alumbrado", "Limpieza", "Mobiliario urbano", "Zonas verdes", "Señalización", "Calzada"
     });
+
     private final JTextArea txtDescripcion = new JTextArea(5, 30);
-    private final JTextField txtLocalizacion = new JTextField(30);
+
+    private final JComboBox<String> cbLocalizacion = new JComboBox<>();
 
     private final JButton btnRegistrar = new JButton("Registrar incidencia");
 
@@ -85,17 +88,17 @@ public class RegistrarIncidenciaView extends JFrame {
         form.add(new JScrollPane(txtDescripcion), gbc);
         y++;
 
-        // Localización
+        // Zona
         gbc.gridx = 0;
         gbc.gridy = y;
         gbc.weightx = 0;
         gbc.anchor = GridBagConstraints.WEST;
-        form.add(new JLabel("Localización:"), gbc);
+        form.add(new JLabel("Localizacion:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = y;
         gbc.weightx = 1;
-        form.add(txtLocalizacion, gbc);
+        form.add(cbLocalizacion, gbc);
         y++;
 
         // Botón registrar
@@ -131,7 +134,15 @@ public class RegistrarIncidenciaView extends JFrame {
     }
 
     public String getLocalizacion() {
-        return txtLocalizacion.getText();
+        return (String) cbLocalizacion.getSelectedItem();
+    }
+
+    public void setZonas(List<String> zonas) {
+    	cbLocalizacion.removeAllItems();
+    	cbLocalizacion.addItem("");
+        for (String zona : zonas) {
+        	cbLocalizacion.addItem(zona);
+        }
     }
 
     public void addValidarUsuarioListener(Runnable action) {
@@ -145,21 +156,21 @@ public class RegistrarIncidenciaView extends JFrame {
     public void habilitarFormularioIncidencia() {
         cbTipo.setEnabled(true);
         txtDescripcion.setEnabled(true);
-        txtLocalizacion.setEnabled(true);
+        cbLocalizacion.setEnabled(true);
         btnRegistrar.setEnabled(true);
     }
 
     public void deshabilitarFormularioIncidencia() {
         cbTipo.setEnabled(false);
         txtDescripcion.setEnabled(false);
-        txtLocalizacion.setEnabled(false);
+        cbLocalizacion.setEnabled(false);
         btnRegistrar.setEnabled(false);
     }
 
     public void limpiarFormularioIncidencia() {
         cbTipo.setSelectedIndex(0);
         txtDescripcion.setText("");
-        txtLocalizacion.setText("");
+        cbLocalizacion.setSelectedIndex(0);
     }
 
     public void bloquearUsuarioValidado() {

@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.List;
+
 import model.IncidenciaDisplayDTO;
 import model.RegistrarIncidenciasModel;
 import util.ApplicationException;
@@ -19,8 +21,18 @@ public class RegistrarIncidenciaController {
         view.addValidarUsuarioListener(() -> validarUsuario());
         view.addRegistrarListener(() -> registrarIncidencia());
 
+        cargarZonas();
         view.deshabilitarFormularioIncidencia();
         view.setVisible(true);
+    }
+
+    private void cargarZonas() {
+        try {
+            List<String> zonas = model.getZonas();
+            view.setZonas(zonas);
+        } catch (Exception ex) {
+            view.showError("Error cargando las zonas: " + ex.getMessage());
+        }
     }
 
     private void validarUsuario() {

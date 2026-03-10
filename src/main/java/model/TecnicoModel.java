@@ -8,11 +8,12 @@ public class TecnicoModel {
 
     // Obtener incidencias asignadas al técnico (Estado 'VALIDADA')
     public List<IncidenciaDisplayDTO> getIncidenciasAsignadas(int idTecnico) {
-        String sql = "SELECT i.id_incidencia as id, i.tipo, i.descripcion, i.localizacion, " +
+        String sql = "SELECT i.id_incidencia as id, i.tipo, i.descripcion, z.nombre as localizacion, " +
                      "i.fecha_hora as fechaHoraRegistro, i.estado, p.usuario as usuarioCiudadano " +
                      "FROM Incidencia i " +
                      "JOIN Persona p ON i.fk_ciudadano = p.id_persona " +
-                     "WHERE i.estado = 'VALIDADA' AND i.fk_tecnico = ?"; 
+                     "JOIN Zona z ON z.id_zona = i.fk_zona " +
+                     "WHERE i.estado = 'ASIGNADA' AND i.fk_tecnico = ?";
         return db.executeQueryPojo(IncidenciaDisplayDTO.class, sql, idTecnico);
     }
 
