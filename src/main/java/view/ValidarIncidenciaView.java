@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class ValidarIncidenciaView extends JDialog {
 	private JTable tableIncidencias = new JTable();
-	private JComboBox<String> cbTipos = new JComboBox<>(new String[] {"Alumbrado", "Limpieza", "Mobiliario urbano", "Mobiliario", "Zonas verdes", "Señalizacion", "Calzada"});
+	private JComboBox<String> cbTipos = new JComboBox<>(new String[] {"Alumbrado", "Limpieza", "Mobiliario urbano", "Zonas verdes", "Señalizacion", "Calzada"});
 	private JButton btnValidar = new JButton("Validar Incidencia");
 	private JTextField txtEmail = new JTextField(20);
 	private JButton btnLogin = new JButton("Cargar Incidencias");
