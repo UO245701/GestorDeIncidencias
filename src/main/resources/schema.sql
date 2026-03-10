@@ -48,3 +48,6 @@ CREATE TABLE Historial (
     FOREIGN KEY (fk_incidencia) REFERENCES Incidencia(id_incidencia),
     FOREIGN KEY (fk_persona) REFERENCES Persona(id_persona)
 );
+
+ALTER TABLE Incidencia ADD COLUMN tiempo_real INTEGER;
+ALTER TABLE Incidencia ADD COLUMN trabajos_realizados TEXT;

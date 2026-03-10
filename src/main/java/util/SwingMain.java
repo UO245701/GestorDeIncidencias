@@ -7,12 +7,14 @@ import javax.swing.JFrame;
 
 import controller.AsignarIncidenciaController;
 import controller.RegistrarIncidenciaController;
+import controller.ResolverIncidenciaController;
 import controller.TecnicoController;
 import controller.ValidarIncidenciaController;
 
 import controller.VisualizarHistorialController;
 import model.AsignarIncidenciaModel;
 import model.RegistrarIncidenciasModel;
+import model.ResolverIncidenciaModel;
 import model.TecnicoModel;
 import model.ValidarIncidenciasModel;
 import model.VisualizarHistorialModel;
@@ -22,6 +24,7 @@ import java.awt.event.ActionEvent;
 
 import view.AsignarIncidenciaView;
 import view.RegistrarIncidenciaView;
+import view.ResolverIncidenciaView;
 import view.TecnicoView;
 import view.ValidarIncidenciaView;
 import view.VisualizarHistorialView;
@@ -134,6 +137,14 @@ public class SwingMain {
 		    new TecnicoController(m, v).initController();
 		});
 		frame.getContentPane().add(btnTecnico);
+		
+		JButton btnResolverIncidencia = new JButton("Resolver incidencia");
+		btnResolverIncidencia.addActionListener(e -> {
+		    ResolverIncidenciaView v = new ResolverIncidenciaView();
+		    ResolverIncidenciaModel m = new ResolverIncidenciaModel();
+		    new ResolverIncidenciaController(m, v).initController();
+		});
+		frame.getContentPane().add(btnResolverIncidencia);
 	}
 
 	public JFrame getFrame() { return this.frame; }
