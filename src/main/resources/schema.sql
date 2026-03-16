@@ -25,7 +25,6 @@ CREATE TABLE Incidencia (
     descripcion TEXT,
     fecha_hora DATETIME DEFAULT (datetime('now','localtime')),
     estado TEXT,
-    horas_estimadas REAL,
     coste REAL,
     horas_prevision INTEGER,
     trabajos_reparacion TEXT,

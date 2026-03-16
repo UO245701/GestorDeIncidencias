@@ -10,7 +10,17 @@ public class ResolverIncidenciaView extends JFrame {
     private JButton btnCargar = new JButton("Cargar incidencias");
 
     private DefaultTableModel tableModel = new DefaultTableModel(
-            new Object[]{"ID", "Tipo", "Descripción", "Localización", "Fecha", "Estado"}, 0) {
+            new Object[]{
+                    "ID",
+                    "Tipo",
+                    "Descripción",
+                    "Localización",
+                    "Fecha",
+                    "Estado",
+                    "Horas prev.",
+                    "Trabajos prev."
+            }, 0) {
+
         @Override
         public boolean isCellEditable(int row, int column) {
             return false;
@@ -29,11 +39,13 @@ public class ResolverIncidenciaView extends JFrame {
     }
 
     private void buildUI() {
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(900, 600);
+        setSize(1000, 600);
         setLocationRelativeTo(null);
 
         JPanel pNorth = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
         pNorth.add(new JLabel("Correo técnico:"));
         pNorth.add(txtCorreoTecnico);
         pNorth.add(btnCargar);
@@ -42,13 +54,14 @@ public class ResolverIncidenciaView extends JFrame {
 
         JPanel pForm = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+
+        gbc.insets = new Insets(6, 6, 6, 6);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        pForm.add(new JLabel("Tiempo real empleado (min):"), gbc);
+        pForm.add(new JLabel("Tiempo real empleado (horas):"), gbc);
 
         gbc.gridx = 1;
         pForm.add(txtTiempoReal, gbc);
@@ -60,13 +73,16 @@ public class ResolverIncidenciaView extends JFrame {
         gbc.gridx = 1;
         txtTrabajos.setLineWrap(true);
         txtTrabajos.setWrapStyleWord(true);
-        pForm.add(new JScrollPane(txtTrabajos), gbc);
+
+        JScrollPane spTrabajos = new JScrollPane(txtTrabajos);
+        pForm.add(spTrabajos, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 2;
         pForm.add(btnResolver, gbc);
 
         getContentPane().setLayout(new BorderLayout());
+
         add(pNorth, BorderLayout.NORTH);
         add(spTabla, BorderLayout.CENTER);
         add(pForm, BorderLayout.SOUTH);
@@ -92,23 +108,45 @@ public class ResolverIncidenciaView extends JFrame {
         return txtTrabajos.getText();
     }
 
-    public JTable getTblIncidencias() {
-        return tblIncidencias;
-    }
-
     public DefaultTableModel getTableModel() {
         return tableModel;
     }
 
     public int getIncidenciaSeleccionada() {
+
         int fila = tblIncidencias.getSelectedRow();
+
         if (fila == -1) {
             return -1;
         }
-        return Integer.parseInt(tableModel.getValueAt(fila, 0).toString());
+
+        return Integer.parseInt(
+                tableModel.getValueAt(fila, 0).toString()
+        );
     }
 
-    public void limpiarFormulario() {
+    public Object[] getFilaSeleccionada() {
+
+        int fila = tblIncidencias.getSelectedRow();
+
+        if (fila == -1) {
+            return null;
+        }
+
+        return new Object[] {
+                tableModel.getValueAt(fila, 0),
+                tableModel.getValueAt(fila, 1),
+                tableModel.getValueAt(fila, 2),
+                tableModel.getValueAt(fila, 3),
+                tableModel.getValueAt(fila, 4),
+                tableModel.getValueAt(fila, 5),
+                tableModel.getValueAt(fila, 6),
+                tableModel.getValueAt(fila, 7)
+        };
+    }
+
+    public void limpiarFormularioResolucion() {
+
         txtTiempoReal.setText("");
         txtTrabajos.setText("");
     }

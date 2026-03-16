@@ -27,12 +27,12 @@ INSERT INTO Incidencia (tipo, descripcion, fk_zona, estado, fk_ciudadano) VALUES
 ('Calzada', 'Socavón peligroso en mitad de la calle 3', 1, 'NUEVA', 1);
 
 -- 2. Incidencia ya asignada a un técnico (ID 3) por el ciudadano (ID 1)
-INSERT INTO Incidencia (tipo, descripcion, fk_zona, estado, horas_estimadas, coste, fk_ciudadano, fk_tecnico) 
-VALUES ('Alumbrado', 'Farola fundida hace una semana', 2, 'ASIGNADA', 2.5, 45.0, 1, 5);
+INSERT INTO Incidencia (tipo, descripcion, fk_zona, estado, coste, fk_ciudadano, fk_tecnico) 
+VALUES ('Alumbrado', 'Farola fundida hace una semana', 2, 'ASIGNADA', 45.0, 1, 5);
 
 -- 3. Incidencia resuelta
-INSERT INTO Incidencia (tipo, descripcion, fk_zona, estado, horas_estimadas, coste, fk_ciudadano, fk_tecnico) 
-VALUES ('Limpieza', 'Grafitis en la fachada del centro cultural', 3, 'RESUELTA', 4.0, 120.0, 1, 5);
+INSERT INTO Incidencia (tipo, descripcion, estado, fk_ciudadano, fk_tecnico, fk_zona, coste, horas_prevision, trabajos_reparacion, tiempo_real, trabajos_realizados) 
+VALUES ('Limpieza', 'Grafitis en la fachada del centro cultural', 'RESUELTA', 1, 5, 2, 120.0, 5, 'Limpiar y pintar', 7, 'Pintarlas paredes de nuevo');
 
 -- Incidencias VALIDADA (las que se pueden asignar por el operador)
 -- (fk_ciudadano = 1 -> paco_vecino)
@@ -63,3 +63,22 @@ VALUES ('RESUELTA', 'FINALIZACION', 'Trabajo de limpieza completado con éxito',
 -- 2. Pon una incidencia en estado VALIDADA y asígnasela a Roberto (ID del técnico)
 -- Primero mira qué ID tiene Roberto: SELECT id_persona FROM Persona WHERE email = 'roberto@tech.es';
 UPDATE Incidencia SET estado = 'VALIDADA', fk_tecnico = (SELECT id_persona FROM Persona WHERE email = 'roberto@tech.es') WHERE id_incidencia = 2;
+
+
+INSERT INTO Incidencia(tipo, descripcion, estado, fk_ciudadano, fk_tecnico, fk_zona, coste, horas_prevision, trabajos_reparacion, tiempo_real, trabajos_realizados) 
+VALUES('Alumbrado','Farola apagada en calle Mayor','EN CURSO',1,5,1,50,2,'Revisar instalación eléctrica',NULL,NULL);
+
+INSERT INTO Incidencia(tipo, descripcion, estado, fk_ciudadano, fk_tecnico, fk_zona, coste, horas_prevision, trabajos_reparacion, tiempo_real, trabajos_realizados) 
+VALUES('Limpieza','Contenedor roto en plaza central','EN CURSO',1,5,2,20,1,'Sustituir contenedor dañado',NULL,NULL);
+
+INSERT INTO Incidencia(tipo, descripcion, estado, fk_ciudadano, fk_tecnico, fk_zona, coste, horas_prevision, trabajos_reparacion, tiempo_real, trabajos_realizados) 
+VALUES('Señalizacion','Señal caída en avenida norte','EN CURSO',1,5,3,75,3,'Colocar nueva señal y fijar soporte',NULL,NULL);
+
+INSERT INTO Incidencia(tipo, descripcion, estado, fk_ciudadano, fk_tecnico, fk_zona, coste, horas_prevision, trabajos_reparacion, tiempo_real, trabajos_realizados) 
+VALUES('Alumbrado','Farola sin corriente en parque','EN CURSO',1,5,1,40,2,'Comprobar fusibles y cableado',NULL,NULL);
+
+INSERT INTO Incidencia(tipo, descripcion, estado, fk_ciudadano, fk_tecnico, fk_zona, coste, horas_prevision, trabajos_reparacion, tiempo_real, trabajos_realizados) 
+VALUES('Limpieza','Papeleras dañadas en plaza','EN CURSO',1,5,2,15,1,'Cambiar papeleras rotas',NULL,NULL);
+
+INSERT INTO Incidencia(tipo, descripcion, estado, fk_ciudadano, fk_tecnico, fk_zona, coste, horas_prevision, trabajos_reparacion, tiempo_real, trabajos_realizados) 
+VALUES('Señalizacion','Semáforo desconfigurado','EN CURSO',1,5,3,90,4,'Revisar controlador y reprogramar',NULL,NULL);
