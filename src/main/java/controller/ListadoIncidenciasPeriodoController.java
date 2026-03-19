@@ -1,7 +1,8 @@
 package controller;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -61,13 +62,17 @@ public class ListadoIncidenciasPeriodoController {
             return;
         }
 
-        String fechaInicio = view.getTxtFechaInicio().getText().trim();
-        String fechaFin = view.getTxtFechaFin().getText().trim();
+        Date fechaInicioDate = view.getDcFechaInicio().getDate();
+        Date fechaFinDate = view.getDcFechaFin().getDate();
 
-        if (fechaInicio.isEmpty() || fechaFin.isEmpty()) {
-            JOptionPane.showMessageDialog(view, "Debe introducir la fecha de inicio y la fecha de fin");
+        if (fechaInicioDate == null || fechaFinDate == null) {
+            JOptionPane.showMessageDialog(view, "Debe seleccionar la fecha de inicio y la fecha de fin");
             return;
         }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaInicio = sdf.format(fechaInicioDate);
+        String fechaFin = sdf.format(fechaFinDate);
 
         if (!fechasValidas(fechaInicio, fechaFin)) {
             return;
@@ -98,19 +103,14 @@ public class ListadoIncidenciasPeriodoController {
     }
 
     private boolean fechasValidas(String fechaInicio, String fechaFin) {
-        try {
-            LocalDate inicio = LocalDate.parse(fechaInicio);
-            LocalDate fin = LocalDate.parse(fechaFin);
+        LocalDate inicio = LocalDate.parse(fechaInicio);
+        LocalDate fin = LocalDate.parse(fechaFin);
 
-            if (inicio.isAfter(fin)) {
-                JOptionPane.showMessageDialog(view, "La fecha de inicio no puede ser posterior a la fecha de fin");
-                return false;
-            }
-
-            return true;
-        } catch (DateTimeParseException e) {
-            JOptionPane.showMessageDialog(view, "Las fechas deben tener formato yyyy-MM-dd");
+        if (inicio.isAfter(fin)) {
+            JOptionPane.showMessageDialog(view, "La fecha de inicio no puede ser posterior a la fecha de fin");
             return false;
         }
+
+        return true;
     }
 }

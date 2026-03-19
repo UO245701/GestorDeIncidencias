@@ -16,11 +16,15 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import com.toedter.calendar.JDateChooser;
+
 public class ListadoIncidenciasPeriodoView extends JFrame {
 
     private JTextField txtUsuario = new JTextField(25);
-    private JTextField txtFechaInicio = new JTextField(10);
-    private JTextField txtFechaFin = new JTextField(10);
+
+    // ✅ CAMBIO: usar JDateChooser
+    private JDateChooser dcFechaInicio = new JDateChooser();
+    private JDateChooser dcFechaFin = new JDateChooser();
 
     private JButton btnValidarUsuario = new JButton("Validar");
     private JButton btnBuscar = new JButton("Buscar incidencias");
@@ -46,18 +50,25 @@ public class ListadoIncidenciasPeriodoView extends JFrame {
     }
 
     private void buildUI() {
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1000, 500);
         setLocationRelativeTo(null);
 
         tabla.setFillsViewportHeight(true);
 
+        // formato fecha
+        dcFechaInicio.setDateFormatString("yyyy-MM-dd");
+        dcFechaFin.setDateFormatString("yyyy-MM-dd");
+
         JPanel pnlFiltro = new JPanel(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
+
         gc.insets = new Insets(5, 5, 5, 5);
         gc.anchor = GridBagConstraints.WEST;
         gc.fill = GridBagConstraints.HORIZONTAL;
 
+        // Usuario
         gc.gridx = 0;
         gc.gridy = 0;
         pnlFiltro.add(new JLabel("Usuario (email o DNI):"), gc);
@@ -70,25 +81,28 @@ public class ListadoIncidenciasPeriodoView extends JFrame {
         gc.weightx = 0;
         pnlFiltro.add(btnValidarUsuario, gc);
 
+        // mensaje
         gc.gridx = 1;
         gc.gridy = 1;
         gc.gridwidth = 2;
         pnlFiltro.add(lblMensajeUsuario, gc);
         gc.gridwidth = 1;
 
+        // Fecha inicio
         gc.gridx = 0;
         gc.gridy = 2;
-        pnlFiltro.add(new JLabel("Fecha inicio (yyyy-MM-dd):"), gc);
+        pnlFiltro.add(new JLabel("Fecha inicio:"), gc);
 
         gc.gridx = 1;
-        pnlFiltro.add(txtFechaInicio, gc);
+        pnlFiltro.add(dcFechaInicio, gc);
 
+        // Fecha fin
         gc.gridx = 0;
         gc.gridy = 3;
-        pnlFiltro.add(new JLabel("Fecha fin (yyyy-MM-dd):"), gc);
+        pnlFiltro.add(new JLabel("Fecha fin:"), gc);
 
         gc.gridx = 1;
-        pnlFiltro.add(txtFechaFin, gc);
+        pnlFiltro.add(dcFechaFin, gc);
 
         gc.gridx = 2;
         pnlFiltro.add(btnBuscar, gc);
@@ -98,22 +112,25 @@ public class ListadoIncidenciasPeriodoView extends JFrame {
 
         JPanel main = new JPanel(new BorderLayout(10, 10));
         main.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         main.add(pnlFiltro, BorderLayout.NORTH);
         main.add(spTabla, BorderLayout.CENTER);
 
         setContentPane(main);
     }
 
+    // ===== getters =====
+
     public JTextField getTxtUsuario() {
         return txtUsuario;
     }
 
-    public JTextField getTxtFechaInicio() {
-        return txtFechaInicio;
+    public JDateChooser getDcFechaInicio() {
+        return dcFechaInicio;
     }
 
-    public JTextField getTxtFechaFin() {
-        return txtFechaFin;
+    public JDateChooser getDcFechaFin() {
+        return dcFechaFin;
     }
 
     public JButton getBtnValidarUsuario() {
