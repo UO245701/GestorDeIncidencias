@@ -33,6 +33,9 @@ import controller.ConsultarIncidenciasController;
 import model.ConsultarIncidenciasModel;
 import view.ConsultarIncidenciasView;
 
+import controller.ListadoIncidenciasPeriodoController;
+import model.ListadoIncidenciasPeriodoModel;
+import view.ListadoIncidenciasPeriodoView;
 
 public class SwingMain {
 
@@ -145,6 +148,23 @@ public class SwingMain {
 		    new ResolverIncidenciaController(m, v).initController();
 		});
 		frame.getContentPane().add(btnResolverIncidencia);
+		
+		JButton btnListadoPeriodo = new JButton("Listado incidencias por periodo");
+
+		btnListadoPeriodo.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+
+		        ListadoIncidenciasPeriodoController controller =
+		                new ListadoIncidenciasPeriodoController(
+		                        new ListadoIncidenciasPeriodoModel(),
+		                        new ListadoIncidenciasPeriodoView()
+		                );
+
+		        controller.initController();
+		    }
+		});
+
+		frame.getContentPane().add(btnListadoPeriodo);
 	}
 
 	public JFrame getFrame() { return this.frame; }
