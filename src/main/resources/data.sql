@@ -9,14 +9,19 @@ delete from persona;
 -- =========================
 -- PERSONAS
 -- =========================
-INSERT INTO Persona (usuario, contrasena, tipo, nombre, apellidos, dni, email) VALUES 
-('paco_vecino', '1234', 'CIUDADANO', 'Francisco', 'García López', '12345678A', 'paco@correo.com'),
-('emma_vecino', '1234', 'CIUDADANO', 'Emma', 'Rueda Sanchez', '11112222T', 'emma@correo.com'),
-('javi_vecino', '1234', 'CIUDADANO', 'Javier', 'Raya Gonzalez', '11223344J', 'javi@correo.com'),
-('laura_op', 'admin', 'OPERADOR', 'Laura', 'Martínez Ruiz', '87654321B', 'laura@ayto.es'),
-('rober_tech', 'tech123', 'TECNICO', 'Roberto', 'Sánchez Soler', '11111111R', 'roberto@tech.es'),
-('pedro_tech', 'tech123', 'TECNICO', 'Pedro', 'Fernandez Perez', '22222222P', 'pedro@tech.es'),
-('marta_tech', 'tech123', 'TECNICO', 'Marta', 'Valverde Martinez', '33333333M', 'marta@tech.es');
+INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email) VALUES 
+('paco_vecino', '1234', 'CIUDADANO', NULL, 'Francisco', 'García López', '12345678A', 'paco@correo.com'),
+('emma_vecino', '1234', 'CIUDADANO', NULL, 'Emma', 'Rueda Sanchez', '11112222T', 'emma@correo.com'),
+('javi_vecino', '1234', 'CIUDADANO', NULL, 'Javier', 'Raya Gonzalez', '11223344J', 'javi@correo.com'),
+
+('laura_op', 'admin', 'OPERADOR', NULL, 'Laura', 'Martínez Ruiz', '87654321B', 'laura@ayto.es'),
+
+--RESPONSABLE
+('rober_tech', 'tech123', 'TECNICO', 'Limpieza', 'Roberto', 'Sánchez Soler', '11111111R', 'roberto@tech.es'),
+
+--TÉCNICOS NORMALES
+('pedro_tech', 'tech123', 'TECNICO', NULL, 'Pedro', 'Fernandez Perez', '22222222P', 'pedro@tech.es'),
+('marta_tech', 'tech123', 'TECNICO', NULL, 'Marta', 'Valverde Martinez', '33333333M', 'marta@tech.es');
 
 -- =========================
 -- ZONAS

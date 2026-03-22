@@ -56,7 +56,7 @@ public class VisualizarHistorialModel {
                 + "       estado "
                 + "FROM Historial "
                 + "WHERE fk_incidencia=? "
-                + "ORDER BY fecha_hora DESC";
+                + "ORDER BY fecha_hora ASC, id_historial ASC";
 
         return db.executeQueryPojo(HistorialDTO.class, sql, incidenciaId);
     }

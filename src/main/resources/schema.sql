@@ -8,10 +8,15 @@ CREATE TABLE Persona (
     usuario TEXT NOT NULL UNIQUE,
     contrasena TEXT NOT NULL,
     tipo TEXT CHECK(tipo IN ('CIUDADANO', 'TECNICO', 'OPERADOR')),
+    tipo_responsable TEXT,
     nombre TEXT,
     apellidos TEXT,
     dni TEXT UNIQUE,
-    email TEXT UNIQUE
+    email TEXT UNIQUE,
+    CHECK (
+        tipo_responsable IS NULL 
+        OR tipo = 'TECNICO'
+    )
 );
 
 CREATE TABLE Zona (
