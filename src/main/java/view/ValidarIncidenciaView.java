@@ -10,6 +10,7 @@ public class ValidarIncidenciaView extends JDialog {
 	private JButton btnValidar = new JButton("Validar Incidencia");
 	private JTextField txtEmail = new JTextField(20);
 	private JButton btnLogin = new JButton("Cargar Incidencias");
+	private JButton btnRechazar = new JButton("Rechazar Incidencia");
 
 	public ValidarIncidenciaView() {
 		setTitle("Validación de Incidencias - Operador");
@@ -31,6 +32,11 @@ public class ValidarIncidenciaView extends JDialog {
 		panelAcciones.add(new JLabel("Tipo final:"));
 		panelAcciones.add(cbTipos);
 		panelAcciones.add(btnValidar);
+		
+		// Añadimos una separación y el botón de rechazar
+		panelAcciones.add(new JLabel(" | "));
+		panelAcciones.add(btnRechazar);
+		
 		getContentPane().add(panelAcciones, BorderLayout.SOUTH);
 	}
 
@@ -40,6 +46,7 @@ public class ValidarIncidenciaView extends JDialog {
 	public String getTipoSeleccionado() { return cbTipos.getSelectedItem().toString(); }
 	public JButton getBtnLogin() { return btnLogin; }
 	public JButton getBtnValidar() { return btnValidar; }
+	public JButton getBtnRechazar() { return btnRechazar; }
 	
 	public void setTableModel(TableModel model) {
 		tableIncidencias.setModel(model);

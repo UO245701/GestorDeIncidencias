@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 import view.ValidarIncidenciaView;
+import util.ApplicationException;
 import util.SwingUtil;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -20,6 +21,7 @@ public class ValidarIncidenciaController {
     public void initController() {
         view.getBtnLogin().addActionListener(e -> SwingUtil.exceptionWrapper(() -> cargarIncidencias()));
         view.getBtnValidar().addActionListener(e -> SwingUtil.exceptionWrapper(() -> ejecutarValidacion()));
+        view.getBtnRechazar().addActionListener(e -> SwingUtil.exceptionWrapper(() -> ejecutarRechazo()));
         view.setVisible(true);
     }
 
@@ -76,5 +78,51 @@ public class ValidarIncidenciaController {
         JOptionPane.showMessageDialog(view, "Incidencia " + idIncidencia + " validada correctamente");
         
         cargarIncidencias(); // Refrescar la tabla para que desaparezca la ya validada
+    }
+    
+ // NUEVA LÓGICA: Rechazar incidencia
+    private void ejecutarRechazo() {
+        if (operadorActual == null) {
+            throw new ApplicationException("Debe identificarse primero con su email.");
+        }
+
+        int row = view.getTable().getSelectedRow();
+        if (row == -1) {
+            throw new ApplicationException("Debe seleccionar una incidencia de la tabla para rechazarla.");
+        }
+
+        int idIncidencia = Integer.parseInt(view.getTable().getValueAt(row, 0).toString());
+        String tipoOriginal = view.getTable().getValueAt(row, 1).toString();
+        String ciudadano = view.getTable().getValueAt(row, 4).toString();
+
+        // Pedimos el motivo obligatorio
+        String motivo = JOptionPane.showInputDialog(view, 
+                "Indique el motivo de rechazo para la incidencia " + idIncidencia + " (Obligatorio):", 
+                "Rechazar Incidencia", 
+                JOptionPane.WARNING_MESSAGE);
+
+        if (motivo == null) {
+            return; // El usuario canceló la ventana
+        }
+
+        if (motivo.trim().isEmpty()) {
+            throw new ApplicationException("Es obligatorio indicar el motivo por el cual se rechaza la incidencia.");
+        }
+
+        // Guardar en BD
+        model.rechazarIncidencia(idIncidencia, operadorActual.getId(), motivo);
+
+        // Notificación de éxito como pide la tarea
+        String mensajeExito = "La incidencia ha sido RECHAZADA.\n\n" +
+                              "Detalles:\n" +
+                              "- ID: " + idIncidencia + "\n" +
+                              "- Tipo reportado: " + tipoOriginal + "\n" +
+                              "- Ciudadano: " + ciudadano + "\n" +
+                              "- Motivo: " + motivo;
+
+        JOptionPane.showMessageDialog(view, mensajeExito, "Operación completada", JOptionPane.INFORMATION_MESSAGE);
+        
+        // Refrescar tabla para que desaparezca
+        cargarIncidencias(); 
     }
 }

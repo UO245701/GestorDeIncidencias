@@ -45,4 +45,19 @@ public class ValidarIncidenciasModel {
 		List<PersonaEntity> lista = db.executeQueryPojo(PersonaEntity.class, sql, email);
 		return lista.isEmpty() ? null : lista.get(0);
 	}
+	
+	/**
+	 * Rechaza una incidencia (pasa de NUEVA a RECHAZADA) y anota el motivo
+	 */
+	public void rechazarIncidencia(int idIncidencia, int idOperador, String motivo) {
+		// 1. Cambiamos el estado
+		String sqlUpdate = "UPDATE Incidencia SET estado = 'RECHAZADA' WHERE id_incidencia = ? AND estado = 'NUEVA'";
+		db.executeUpdate(sqlUpdate, idIncidencia);
+
+		// 2. Registramos en el historial
+		String sqlHistorial = "INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) " +
+				              "VALUES ('RECHAZADA', 'RECHAZO', ?, ?, ?)";
+		String detalleHistorial = "Rechazada por operador. Motivo: " + motivo.trim();
+		db.executeUpdate(sqlHistorial, detalleHistorial, idIncidencia, idOperador);
+	}
 }
