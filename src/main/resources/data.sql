@@ -93,3 +93,18 @@ INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) VALUE
 ('ASIGNADA', 'ASIGNACION', 'La operadora asignó la incidencia al técnico Roberto', 11, 4),
 ('EN CURSO', 'INICIO_REPARACION', 'El técnico inició los trabajos', 11, 5),
 ('RESUELTA', 'FINALIZACION', 'Trabajo completado con éxito', 11, 5);
+
+
+-- 2. Insertar 3 incidencias que el informe mensual cazará perfectamente
+
+-- Incidencia 1: Para Paco (RESUELTA hace 2 días, 150 minutos)
+INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, fk_ciudadano, fk_tecnico, tiempo_real, trabajos_realizados)
+VALUES ('Alumbrado', 'Farola fundida en calle mayor', 3, datetime('now', '-2 days'), 'RESUELTA', 1, 5, 150, 'Cambio de bombilla y cableado');
+
+-- Incidencia 2: Para Paco (CERRADA hace 10 días, 90 minutos)
+INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, fk_ciudadano, fk_tecnico, tiempo_real, trabajos_realizados)
+VALUES ('Limpieza', 'Graffiti en fachada del ayuntamiento', 1, datetime('now', '-10 days'), 'CERRADA', 1, 5, 90, 'Limpieza a presión con disolvente');
+
+-- Incidencia 3: Para Lucía (RESUELTA hace 5 días, 200 minutos)
+INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, fk_ciudadano, fk_tecnico, tiempo_real, trabajos_realizados)
+VALUES ('Mobiliario urbano', 'Banco astillado en el parque', 2, datetime('now', '-5 days'), 'RESUELTA', 1, 6, 200, 'Sustitución de maderas y barnizado');

@@ -30,9 +30,11 @@ import view.ValidarIncidenciaView;
 import view.VisualizarHistorialView;
 
 import controller.ConsultarIncidenciasController;
+import controller.InformeMensualController;
 import model.ConsultarIncidenciasModel;
+import model.InformeMensualModel;
 import view.ConsultarIncidenciasView;
-
+import view.InformeMensualView;
 import controller.ListadoIncidenciasPeriodoController;
 import model.ListadoIncidenciasPeriodoModel;
 import view.ListadoIncidenciasPeriodoView;
@@ -179,6 +181,15 @@ public class SwingMain {
 		});
 
 		frame.getContentPane().add(btnListadoPeriodo);
+		
+		// Añadir donde creas los demás botones en SwingMain.java
+		JButton btnInformeMensual = new JButton("Informe Mensual (Responsable)");
+		btnInformeMensual.addActionListener(e -> {
+		    InformeMensualView v = new InformeMensualView();
+		    InformeMensualModel m = new InformeMensualModel();
+		    new InformeMensualController(m, v).initController();
+		});
+		frame.getContentPane().add(btnInformeMensual);
 	}
 
 	public JFrame getFrame() { return this.frame; }
