@@ -11,6 +11,7 @@ public class TecnicoView extends JFrame {
     private JTextField txtHoras = new JTextField(5);
     private JTextArea txtTrabajos = new JTextArea(3, 20);
     private JButton btnAnotar = new JButton("Confirmar Previsión y Empezar");
+    private JButton btnRechazar = new JButton("Rechazar Incidencia");
 
     public TecnicoView() {
         setTitle("Gestión de Incidencias - Técnico");
@@ -28,11 +29,23 @@ public class TecnicoView extends JFrame {
         // Centro (Tabla)
         add(new JScrollPane(tablaIncidencias), BorderLayout.CENTER);
 
-        // Panel Inferior (Formulario de previsión)
+     // Panel Inferior (Formulario y botones)
         JPanel south = new JPanel(new GridLayout(3, 1));
-        JPanel p1 = new JPanel(); p1.add(new JLabel("Horas estimadas:")); p1.add(txtHoras);
-        JPanel p2 = new JPanel(); p2.add(new JLabel("Trabajos necesarios:")); p2.add(new JScrollPane(txtTrabajos));
-        south.add(p1); south.add(p2); south.add(btnAnotar);
+        
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT)); 
+        p1.add(new JLabel("Horas estimadas:")); p1.add(txtHoras);
+        
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT)); 
+        p2.add(new JLabel("Trabajos necesarios:")); p2.add(new JScrollPane(txtTrabajos));
+        
+        // Agrupamos los dos botones en el mismo panel
+        JPanel pBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        pBotones.add(btnAnotar);
+        pBotones.add(btnRechazar); // Añadimos el botón rojo mentalmente aquí
+        
+        south.add(p1); 
+        south.add(p2); 
+        south.add(pBotones);
         add(south, BorderLayout.SOUTH);
     }
 
@@ -40,6 +53,7 @@ public class TecnicoView extends JFrame {
     public String getEmail() { return txtEmail.getText(); }
     public JButton getBtnLogin() { return btnLogin; }
     public JButton getBtnAnotar() { return btnAnotar; }
+    public JButton getBtnRechazar() { return btnRechazar; }
     public JTable getTable() { return tablaIncidencias; }
     public String getHoras() { return txtHoras.getText(); }
     public String getTrabajos() { return txtTrabajos.getText(); }

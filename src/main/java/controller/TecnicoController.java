@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 import view.TecnicoView;
+import util.ApplicationException;
 import util.SwingUtil;
 import javax.swing.JOptionPane;
 import java.util.List;
@@ -19,6 +20,7 @@ public class TecnicoController {
     public void initController() {
         view.getBtnLogin().addActionListener(e -> SwingUtil.exceptionWrapper(() -> cargarIncidencias()));
         view.getBtnAnotar().addActionListener(e -> SwingUtil.exceptionWrapper(() -> ejecutarPrevision()));
+        view.getBtnRechazar().addActionListener(e -> SwingUtil.exceptionWrapper(() -> ejecutarRechazo()));
         view.setVisible(true);
     }
 
@@ -82,6 +84,58 @@ public class TecnicoController {
                 "Iniciada reparación. Previsión: " + horas + "h. Trabajos: " + trabajos);
 
         JOptionPane.showMessageDialog(view, "Cambios registrados. La incidencia ahora está EN CURSO.");
+        cargarIncidencias(); 
+    }
+    
+    private void ejecutarRechazo() {
+        if (tecnicoActual == null) {
+            throw new ApplicationException("Identifíquese primero.");
+        }
+
+        int row = view.getTable().getSelectedRow();
+        if (row == -1) {
+            throw new ApplicationException("Seleccione la incidencia que desea rechazar.");
+        }
+
+        int idIncidencia = Integer.parseInt(view.getTable().getValueAt(row, 0).toString());
+        // Extraemos un par de datos extra de la tabla para que el mensaje quede más completo
+        String tipoIncidencia = view.getTable().getValueAt(row, 1).toString();
+        String localizacion = view.getTable().getValueAt(row, 3).toString();
+
+        // Pedimos el motivo con un InputDialog
+        String motivo = JOptionPane.showInputDialog(view, 
+                "Indique el motivo por el que rechaza esta incidencia (Obligatorio):", 
+                "Rechazar Incidencia", 
+                JOptionPane.WARNING_MESSAGE);
+
+        // Si el técnico pulsa "Cancelar" o la 'X', el motivo es null y abortamos silenciosamente
+        if (motivo == null) {
+            return; 
+        }
+
+        // Validación de campo vacío lanzando excepción para que la capture el exceptionWrapper
+        if (motivo.trim().isEmpty()) {
+            throw new ApplicationException("Debe indicar obligatoriamente un motivo para rechazar la incidencia.");
+        }
+
+        // Llamamos al modelo
+        model.rechazarIncidencia(idIncidencia, tecnicoActual.getId(), motivo);
+
+        // NUEVO MENSAJE DE CONFIRMACIÓN MÁS DETALLADO
+        String mensajeExito = "La incidencia ha sido rechazada y devuelta al sistema.\n\n" +
+                              "Detalles de la operación:\n" +
+                              "- ID Incidencia: " + idIncidencia + "\n" +
+                              "- Tipo: " + tipoIncidencia + "\n" +
+                              "- Localización: " + localizacion + "\n" +
+                              "- Motivo del rechazo: " + motivo + "\n\n" +
+                              "Se ha registrado el cambio en el historial de la incidencia.";
+
+        JOptionPane.showMessageDialog(view, 
+                mensajeExito, 
+                "Rechazo completado", 
+                JOptionPane.INFORMATION_MESSAGE);
+        
+        // Recargamos la tabla para que desaparezca
         cargarIncidencias(); 
     }
 }

@@ -37,4 +37,19 @@ public class TecnicoModel {
         List<PersonaEntity> lista = db.executeQueryPojo(PersonaEntity.class, sql, email);
         return lista.isEmpty() ? null : lista.get(0);
     }
+    
+ // Rechazar incidencia asignada
+    public void rechazarIncidencia(int idIncidencia, int idTecnico, String motivo) {
+        // 1. Cambiar estado a RECHAZADA (asegurando que estaba ASIGNADA)
+        String sqlUpdate = "UPDATE Incidencia SET estado = 'RECHAZADA' " +
+                           "WHERE id_incidencia = ? AND estado = 'ASIGNADA'";
+        db.executeUpdate(sqlUpdate, idIncidencia);
+
+        // 2. Registrar en el historial el motivo exacto del técnico
+        String sqlHistorial = "INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) " +
+                              "VALUES ('RECHAZADA', 'RECHAZO', ?, ?, ?)";
+        
+        String detalleHistorial = "Incidencia rechazada. Motivo: " + motivo.trim();
+        db.executeUpdate(sqlHistorial, detalleHistorial, idIncidencia, idTecnico);
+    }
 }
