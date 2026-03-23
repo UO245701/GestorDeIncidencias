@@ -75,7 +75,24 @@ public class ValidarIncidenciaController {
         model.registrarEnHistorial(idIncidencia, operadorActual.getId(), nuevoTipo, 
                 "Incidencia validada y clasificada como: " + nuevoTipo);
 
-        JOptionPane.showMessageDialog(view, "Incidencia " + idIncidencia + " validada correctamente");
+     // Extraemos datos de la tabla para un resumen completo
+        String tipoOriginal = view.getTable().getValueAt(row, 1).toString();
+        String localizacion = view.getTable().getValueAt(row, 3).toString();
+        String ciudadano = view.getTable().getValueAt(row, 4).toString();
+
+        String mensajeExito = "La incidencia ha sido VALIDADA y clasificada correctamente.\n\n" +
+                              "Resumen de la operación:\n" +
+                              "- ID Incidencia: " + idIncidencia + "\n" +
+                              "- Ciudadano reportador: " + ciudadano + "\n" +
+                              "- Localización: " + localizacion + "\n" +
+                              "- Tipo original reportado: " + tipoOriginal + "\n" +
+                              "- Tipo final asignado: " + nuevoTipo + "\n\n" +
+                              "La incidencia está ahora lista para ser asignada a un técnico.";
+
+        JOptionPane.showMessageDialog(view, 
+                mensajeExito, 
+                "Validación completada", 
+                JOptionPane.INFORMATION_MESSAGE);
         
         cargarIncidencias(); // Refrescar la tabla para que desaparezca la ya validada
     }

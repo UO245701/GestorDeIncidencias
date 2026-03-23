@@ -83,7 +83,23 @@ public class TecnicoController {
         model.registrarHistorialTecnico(idIncidencia, tecnicoActual.getId(), 
                 "Iniciada reparación. Previsión: " + horas + "h. Trabajos: " + trabajos);
 
-        JOptionPane.showMessageDialog(view, "Cambios registrados. La incidencia ahora está EN CURSO.");
+     // Extraemos datos de la tabla para el mensaje
+        String tipoIncidencia = view.getTable().getValueAt(row, 1).toString();
+        String localizacion = view.getTable().getValueAt(row, 3).toString();
+
+        String mensajeExito = "Planificación registrada con éxito. La incidencia pasa a estado EN CURSO.\n\n" +
+                              "Detalles de la planificación:\n" +
+                              "- ID Incidencia: " + idIncidencia + "\n" +
+                              "- Tipo: " + tipoIncidencia + "\n" +
+                              "- Localización: " + localizacion + "\n" +
+                              "- Horas estimadas: " + horas + "h\n" +
+                              "- Trabajos previstos: " + trabajos + "\n\n" +
+                              "Se ha actualizado el historial correspondiente.";
+
+        JOptionPane.showMessageDialog(view, 
+                mensajeExito, 
+                "Planificación completada", 
+                JOptionPane.INFORMATION_MESSAGE);
         cargarIncidencias(); 
     }
     
