@@ -41,6 +41,10 @@ import controller.CerrarIncidenciasController;
 import model.CerrarIncidenciasModel;
 import view.CerrarIncidenciasView;
 
+import controller.RegistrarTrabajoController;
+import model.RegistrarTrabajoModel;
+import view.RegistrarTrabajoView;
+
 public class SwingMain {
 
 	private JFrame frame;
@@ -162,6 +166,21 @@ public class SwingMain {
 		});
 
 		frame.getContentPane().add(btnCerrarIncidencias);
+		
+		JButton btnRegistrarTrabajo = new JButton("Registrar trabajos");
+
+		btnRegistrarTrabajo.addActionListener(e -> {
+
+		    RegistrarTrabajoView v = new RegistrarTrabajoView();
+		    RegistrarTrabajoModel m = new RegistrarTrabajoModel();
+
+		    RegistrarTrabajoController c = new RegistrarTrabajoController(m, v);
+		    c.initController();
+
+		    v.getFrame().setVisible(true);
+		});
+
+		frame.getContentPane().add(btnRegistrarTrabajo);
 		
 		JButton btnListadoPeriodo = new JButton("Listado incidencias por periodo");
 
