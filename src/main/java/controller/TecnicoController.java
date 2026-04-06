@@ -6,6 +6,10 @@ import util.ApplicationException;
 import util.SwingUtil;
 import javax.swing.JOptionPane;
 import java.util.List;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TecnicoController {
     private TecnicoModel model;
@@ -86,21 +90,19 @@ public class TecnicoController {
      // Extraemos datos de la tabla para el mensaje
         String tipoIncidencia = view.getTable().getValueAt(row, 1).toString();
         String localizacion = view.getTable().getValueAt(row, 3).toString();
+        String fechaHoraActual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 
         String mensajeExito = "Planificación registrada con éxito. La incidencia pasa a estado EN CURSO.\n\n" +
-                              "Detalles de la planificación:\n" +
-                              "- ID Incidencia: " + idIncidencia + "\n" +
-                              "- Tipo: " + tipoIncidencia + "\n" +
-                              "- Localización: " + localizacion + "\n" +
-                              "- Horas estimadas: " + horas + "h\n" +
-                              "- Trabajos previstos: " + trabajos + "\n\n" +
-                              "Se ha actualizado el historial correspondiente.";
+                "Detalles de la planificación:\n" +
+                "- ID Incidencia: " + idIncidencia + "\n" +
+                "- Tipo: " + tipoIncidencia + "\n" +
+                "- Localización: " + localizacion + "\n" +
+                "- Horas estimadas: " + horas + "h\n" +
+                "- Trabajos previstos: " + trabajos + "\n\n" +
+                "Modificación realizada el: " + fechaHoraActual; // <--- FECHA AÑADIDA
 
-        JOptionPane.showMessageDialog(view, 
-                mensajeExito, 
-                "Planificación completada", 
-                JOptionPane.INFORMATION_MESSAGE);
-        cargarIncidencias(); 
+        JOptionPane.showMessageDialog(view, mensajeExito, "Planificación completada", JOptionPane.INFORMATION_MESSAGE);
+        cargarIncidencias();
     }
     
     private void ejecutarRechazo() {
@@ -118,40 +120,41 @@ public class TecnicoController {
         String tipoIncidencia = view.getTable().getValueAt(row, 1).toString();
         String localizacion = view.getTable().getValueAt(row, 3).toString();
 
-        // Pedimos el motivo con un InputDialog
-        String motivo = JOptionPane.showInputDialog(view, 
-                "Indique el motivo por el que rechaza esta incidencia (Obligatorio):", 
-                "Rechazar Incidencia", 
-                JOptionPane.WARNING_MESSAGE);
+        // 1. CREAMOS EL CUADRO DE TEXTO GRANDE
+        JTextArea txtMotivo = new JTextArea(6, 35); // 6 filas de alto, 35 columnas de ancho
+        txtMotivo.setLineWrap(true);
+        txtMotivo.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(txtMotivo);
 
-        // Si el técnico pulsa "Cancelar" o la 'X', el motivo es null y abortamos silenciosamente
-        if (motivo == null) {
-            return; 
+        // 2. LO MOSTRAMOS EN EL DIÁLOGO
+        int opcion = JOptionPane.showConfirmDialog(view, scrollPane, 
+                "Indique el motivo por el que rechaza esta incidencia (Obligatorio):", 
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (opcion != JOptionPane.OK_OPTION) {
+            return; // El usuario pulsó cancelar o cerró la ventana
         }
 
-        // Validación de campo vacío lanzando excepción para que la capture el exceptionWrapper
+        String motivo = txtMotivo.getText();
+
         if (motivo.trim().isEmpty()) {
             throw new ApplicationException("Debe indicar obligatoriamente un motivo para rechazar la incidencia.");
         }
 
-        // Llamamos al modelo
         model.rechazarIncidencia(idIncidencia, tecnicoActual.getId(), motivo);
 
-        // NUEVO MENSAJE DE CONFIRMACIÓN MÁS DETALLADO
+        // Generamos la fecha y hora actual
+        String fechaHoraActual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+
         String mensajeExito = "La incidencia ha sido rechazada y devuelta al sistema.\n\n" +
                               "Detalles de la operación:\n" +
                               "- ID Incidencia: " + idIncidencia + "\n" +
                               "- Tipo: " + tipoIncidencia + "\n" +
                               "- Localización: " + localizacion + "\n" +
                               "- Motivo del rechazo: " + motivo + "\n\n" +
-                              "Se ha registrado el cambio en el historial de la incidencia.";
+                              "Modificación realizada el: " + fechaHoraActual; // <--- FECHA AÑADIDA
 
-        JOptionPane.showMessageDialog(view, 
-                mensajeExito, 
-                "Rechazo completado", 
-                JOptionPane.INFORMATION_MESSAGE);
-        
-        // Recargamos la tabla para que desaparezca
-        cargarIncidencias(); 
+        JOptionPane.showMessageDialog(view, mensajeExito, "Rechazo completado", JOptionPane.INFORMATION_MESSAGE);
+        cargarIncidencias();
     }
 }

@@ -6,6 +6,10 @@ import util.ApplicationException;
 import util.SwingUtil;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ValidarIncidenciaController {
     private ValidarIncidenciasModel model;
@@ -80,20 +84,19 @@ public class ValidarIncidenciaController {
         String localizacion = view.getTable().getValueAt(row, 3).toString();
         String ciudadano = view.getTable().getValueAt(row, 4).toString();
 
+        // Generamos fecha y hora
+        String fechaHoraActual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+
         String mensajeExito = "La incidencia ha sido VALIDADA y clasificada correctamente.\n\n" +
                               "Resumen de la operación:\n" +
                               "- ID Incidencia: " + idIncidencia + "\n" +
                               "- Ciudadano reportador: " + ciudadano + "\n" +
                               "- Localización: " + localizacion + "\n" +
-                              "- Tipo original reportado: " + tipoOriginal + "\n" +
+                              "- Tipo original: " + tipoOriginal + "\n" +
                               "- Tipo final asignado: " + nuevoTipo + "\n\n" +
-                              "La incidencia está ahora lista para ser asignada a un técnico.";
+                              "Modificación realizada el: " + fechaHoraActual; // <--- FECHA AÑADIDA
 
-        JOptionPane.showMessageDialog(view, 
-                mensajeExito, 
-                "Validación completada", 
-                JOptionPane.INFORMATION_MESSAGE);
-        
+        JOptionPane.showMessageDialog(view, mensajeExito, "Validación completada", JOptionPane.INFORMATION_MESSAGE);
         cargarIncidencias(); // Refrescar la tabla para que desaparezca la ya validada
     }
     
@@ -113,33 +116,41 @@ public class ValidarIncidenciaController {
         String ciudadano = view.getTable().getValueAt(row, 4).toString();
 
         // Pedimos el motivo obligatorio
-        String motivo = JOptionPane.showInputDialog(view, 
-                "Indique el motivo de rechazo para la incidencia " + idIncidencia + " (Obligatorio):", 
-                "Rechazar Incidencia", 
-                JOptionPane.WARNING_MESSAGE);
+     // 1. CREAMOS EL CUADRO DE TEXTO GRANDE
+        JTextArea txtMotivo = new JTextArea(6, 35);
+        txtMotivo.setLineWrap(true);
+        txtMotivo.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(txtMotivo);
 
-        if (motivo == null) {
-            return; // El usuario canceló la ventana
+        // 2. LO MOSTRAMOS EN EL DIÁLOGO
+        int opcion = JOptionPane.showConfirmDialog(view, scrollPane, 
+                "Indique el motivo de rechazo para la incidencia " + idIncidencia + " (Obligatorio):", 
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (opcion != JOptionPane.OK_OPTION) {
+            return; 
         }
+
+        String motivo = txtMotivo.getText();
 
         if (motivo.trim().isEmpty()) {
             throw new ApplicationException("Es obligatorio indicar el motivo por el cual se rechaza la incidencia.");
         }
 
-        // Guardar en BD
         model.rechazarIncidencia(idIncidencia, operadorActual.getId(), motivo);
 
-        // Notificación de éxito como pide la tarea
+        // Generamos fecha y hora
+        String fechaHoraActual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+
         String mensajeExito = "La incidencia ha sido RECHAZADA.\n\n" +
                               "Detalles:\n" +
                               "- ID: " + idIncidencia + "\n" +
                               "- Tipo reportado: " + tipoOriginal + "\n" +
                               "- Ciudadano: " + ciudadano + "\n" +
-                              "- Motivo: " + motivo;
+                              "- Motivo: " + motivo + "\n\n" +
+                              "Modificación realizada el: " + fechaHoraActual; // <--- FECHA AÑADIDA
 
         JOptionPane.showMessageDialog(view, mensajeExito, "Operación completada", JOptionPane.INFORMATION_MESSAGE);
-        
-        // Refrescar tabla para que desaparezca
-        cargarIncidencias(); 
+        cargarIncidencias();
     }
 }
