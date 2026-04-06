@@ -32,6 +32,9 @@ public class ResolverIncidenciaView extends JFrame {
     private JTextField txtTiempoReal = new JTextField(10);
     private JTextArea txtTrabajos = new JTextArea(5, 30);
     private JButton btnResolver = new JButton("Marcar como resuelta");
+    
+    private JTextField txtCosteMateriales = new JTextField("0.0", 10);
+    private JTextArea txtDescMateriales = new JTextArea(2, 30);
 
     public ResolverIncidenciaView() {
         super("Gestor de incidencias - Resolver incidencia");
@@ -52,6 +55,8 @@ public class ResolverIncidenciaView extends JFrame {
 
         JScrollPane spTabla = new JScrollPane(tblIncidencias);
 
+        // PANEL SUR
+        // Formulario Resolucion
         JPanel pForm = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -80,12 +85,37 @@ public class ResolverIncidenciaView extends JFrame {
         gbc.gridx = 1;
         gbc.gridy = 2;
         pForm.add(btnResolver, gbc);
+        
+     // Formulario Costes
+        JPanel pCostes = new JPanel(new GridBagLayout());
+        pCostes.setBorder(BorderFactory.createTitledBorder("Gestión de Costes (Solo para estado Resuelta)"));
+        
+        gbc.gridx = 0; gbc.gridy = 0;
+        pCostes.add(new JLabel("Coste materiales/externos (€):"), gbc);
+        gbc.gridx = 1;
+        pCostes.add(txtCosteMateriales, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        pCostes.add(new JLabel("Descripción de los cargos:"), gbc);
+        gbc.gridx = 1;
+        txtDescMateriales.setLineWrap(true);
+        txtDescMateriales.setWrapStyleWord(true);
+        pCostes.add(new JScrollPane(txtDescMateriales), gbc);
+
+        // Unimos los dos sub-paneles
+        JPanel pSurFinal = new JPanel(new BorderLayout(5, 5));
+        pSurFinal.add(pForm, BorderLayout.NORTH);
+        pSurFinal.add(pCostes, BorderLayout.CENTER);
+        
+        JPanel pBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        pBoton.add(btnResolver);
+        pSurFinal.add(pBoton, BorderLayout.SOUTH);
 
         getContentPane().setLayout(new BorderLayout());
 
         add(pNorth, BorderLayout.NORTH);
         add(spTabla, BorderLayout.CENTER);
-        add(pForm, BorderLayout.SOUTH);
+        add(pSurFinal, BorderLayout.SOUTH);
     }
 
     public JButton getBtnCargar() {
@@ -110,6 +140,14 @@ public class ResolverIncidenciaView extends JFrame {
 
     public DefaultTableModel getTableModel() {
         return tableModel;
+    }
+    
+    public String getCosteMateriales() { 
+    	return txtCosteMateriales.getText(); 
+    }
+    
+    public String getDescMateriales() { 
+    	return txtDescMateriales.getText(); 
     }
 
     public int getIncidenciaSeleccionada() {
@@ -146,8 +184,9 @@ public class ResolverIncidenciaView extends JFrame {
     }
 
     public void limpiarFormularioResolucion() {
-
         txtTiempoReal.setText("");
         txtTrabajos.setText("");
+        txtCosteMateriales.setText("");
+        txtDescMateriales.setText("");
     }
 }

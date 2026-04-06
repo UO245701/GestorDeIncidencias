@@ -11,6 +11,11 @@ import util.ApplicationException;
 import util.SwingUtil;
 import view.ResolverIncidenciaView;
 
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class ResolverIncidenciaController {
 
     private ResolverIncidenciaModel model;
@@ -95,28 +100,63 @@ public class ResolverIncidenciaController {
         if (trabajosRealizados == null || trabajosRealizados.trim().isEmpty()) {
             throw new ApplicationException("La descripción de los trabajos realizados es obligatoria");
         }
+        
+     // --- LÓGICA DE GESTIÓN DE COSTES ---
+        double costeMateriales = 0.0;
+        try {
+            // Reemplazamos coma por punto para evitar errores de parseo si el usuario usa teclado numérico español
+            String costeTxt = view.getCosteMateriales().replace(",", "."); 
+            if (!costeTxt.isEmpty()) {
+                costeMateriales = Double.parseDouble(costeTxt);
+            }
+        } catch (NumberFormatException e) {
+            throw new ApplicationException("El coste de materiales debe ser un valor numérico válido.");
+        }
 
+        String descMateriales = view.getDescMateriales().trim();
+
+        // VALIDACIÓN ESTRELLA: Si se imputa dinero, hay que explicar por qué
+        if (costeMateriales > 0 && descMateriales.isEmpty()) {
+            throw new ApplicationException("Si imputa gastos adicionales por materiales, debe explicar obligatoriamente el cargo detalladamente en su campo correspondiente.");
+        }
+
+        // CÁLCULOS MATEMÁTICOS
+        double precioHoraTecnico = model.getPrecioHoraTecnico(idTecnicoActual);
+        double costeHoras = tiempoReal * precioHoraTecnico;
+        double costeTotal = costeHoras + costeMateriales;
+
+     // Llamamos al modelo actualizado
+        model.resolverIncidencia(idIncidencia, idTecnicoActual, tiempoReal, trabajosRealizados, costeMateriales, descMateriales, costeTotal);
+        
         Object[] fila = view.getFilaSeleccionada();
+        String fechaHoraActual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+        
+     // Montamos el "Ticket" fusionando los datos anteriores con los nuevos costes
+        String recibo = "Incidencia resuelta y bloqueada correctamente.\n\n"
+                      + "Datos de la incidencia:\n"
+                      + "- ID: " + fila[0] + "\n"
+                      + "- Tipo: " + fila[1] + "\n"
+                      + "- Descripción: " + fila[2] + "\n"
+                      + "- Localización: " + fila[3] + "\n\n"
+                      + "--- DESGLOSE DE COSTES ---\n"
+                      + "- Horas trabajadas: " + tiempoReal + "h (x" + precioHoraTecnico + "€/h) = " + costeHoras + "€\n"
+                      + "- Coste adicional (Materiales): " + costeMateriales + "€\n"
+                      + "- Justificación materiales: " + (descMateriales.isEmpty() ? "Ninguno" : descMateriales) + "\n"
+                      + "--------------------------------\n"
+                      + "COSTE TOTAL: " + costeTotal + "€\n\n"
+                      + "El estado de la incidencia ha pasado a RESUELTA y el cambio ha sido registrado permanentemente.\n\n"
+                      + "Modificación realizada el: " + fechaHoraActual;
 
-        model.resolverIncidencia(idIncidencia, idTecnicoActual, tiempoReal, trabajosRealizados);
+        // Usamos JTextArea para que el mensaje se vea grande y completo
+        JTextArea txtRecibo = new JTextArea(15, 45);
+        txtRecibo.setText(recibo);
+        txtRecibo.setEditable(false);
+        txtRecibo.setBackground(view.getBackground());
 
         JOptionPane.showMessageDialog(
-                view,
-                "Incidencia resuelta correctamente.\n\n"
-                        + "Datos de la incidencia:\n"
-                        + "ID: " + fila[0] + "\n"
-                        + "Tipo: " + fila[1] + "\n"
-                        + "Descripción: " + fila[2] + "\n"
-                        + "Localización: " + fila[3] + "\n"
-                        + "Fecha de registro: " + fila[4] + "\n"
-                        + "Estado anterior: " + fila[5] + "\n"
-                        + "Horas previstas: " + fila[6] + "\n"
-                        + "Trabajos de reparación previstos: " + fila[7] + "\n\n"
-                        + "Datos registrados en la resolución:\n"
-                        + "Tiempo real empleado: " + tiempoReal + " horas\n"
-                        + "Trabajos realizados:\n" + trabajosRealizados + "\n\n"
-                        + "El estado de la incidencia ha pasado a RESUELTA y el cambio ha sido registrado en el historial.",
-                "Incidencia resuelta",
+                view, 
+                new JScrollPane(txtRecibo), 
+                "Resolución de Incidencia y Costes", 
                 JOptionPane.INFORMATION_MESSAGE
         );
 

@@ -55,3 +55,11 @@ CREATE TABLE Historial (
 
 ALTER TABLE Incidencia ADD COLUMN tiempo_real INTEGER;
 ALTER TABLE Incidencia ADD COLUMN trabajos_realizados TEXT;
+
+-- Añadimos el precio por hora a los técnicos (por defecto 25€/h para no dejarlo vacío)
+ALTER TABLE Persona ADD COLUMN precio_hora REAL DEFAULT 25.0;
+
+-- Añadimos las columnas de costes a la incidencia
+ALTER TABLE Incidencia ADD COLUMN coste_materiales REAL DEFAULT 0.0;
+ALTER TABLE Incidencia ADD COLUMN descripcion_materiales TEXT;
+ALTER TABLE Incidencia ADD COLUMN coste_total REAL DEFAULT 0.0;

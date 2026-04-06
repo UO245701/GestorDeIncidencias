@@ -45,24 +45,46 @@ public class ResolverIncidenciaModel {
         return db.executeQueryPojo(IncidenciaDisplayDTO.class, sql, idTecnico);
     }
 
-    public void resolverIncidencia(int idIncidencia, int idTecnico, int tiempoReal, String trabajosRealizados) {
+ // Obtener precio/hora del técnico
+    public double getPrecioHoraTecnico(int idTecnico) {
+        String sql = "SELECT precio_hora FROM Persona WHERE id_persona = ?";
+        List<Object[]> rows = db.executeQueryArray(sql, idTecnico);
+        
+        if (rows.isEmpty() || rows.get(0)[0] == null) {
+            return 25.0; // Precio por defecto si falla
+        }
+        return Double.parseDouble(rows.get(0)[0].toString());
+    }
+
+    // MÉTODO ACTUALIZADO: Resolver con costes
+    public void resolverIncidencia(int idIncidencia, int idTecnico, int tiempoReal, String trabajosRealizados, 
+                                   double costeMateriales, String descripcionMateriales, double costeTotal) {
+        
         validarDatosResolucion(idIncidencia, idTecnico, tiempoReal, trabajosRealizados);
         asegurarQueLaIncidenciaEsDelTecnicoYEstaEnCurso(idIncidencia, idTecnico);
 
+        // 1. Actualizamos la incidencia con los nuevos campos de costes
         String updateIncidencia = "UPDATE Incidencia "
                                 + "SET tiempo_real = ?, "
                                 + "trabajos_realizados = ?, "
+                                + "coste_materiales = ?, "
+                                + "descripcion_materiales = ?, "
+                                + "coste_total = ?, "
                                 + "estado = 'RESUELTA' "
                                 + "WHERE id_incidencia = ?";
 
-        db.executeUpdate(updateIncidencia, tiempoReal, trabajosRealizados.trim(), idIncidencia);
+        db.executeUpdate(updateIncidencia, tiempoReal, trabajosRealizados.trim(), 
+                         costeMateriales, descripcionMateriales, costeTotal, idIncidencia);
 
+        // 2. Insertamos en el historial un desglose completo
         String insertHistorial = "INSERT INTO Historial "
                                + "(fecha_hora, estado, accion, detalle, fk_incidencia, fk_persona) "
                                + "VALUES (datetime('now','localtime'), 'RESUELTA', 'RESOLVER INCIDENCIA', ?, ?, ?)";
 
-        String detalle = "Tiempo real empleado: " + tiempoReal + " minutos. "
-                       + "Trabajos realizados: " + trabajosRealizados.trim();
+        String detalle = "Tiempo: " + tiempoReal + "h. "
+                       + "Trabajos: " + trabajosRealizados.trim() + ". "
+                       + "Coste Materiales: " + costeMateriales + "€. "
+                       + "Coste Total: " + costeTotal + "€.";
 
         db.executeUpdate(insertHistorial, detalle, idIncidencia, idTecnico);
     }
