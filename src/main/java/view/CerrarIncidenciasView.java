@@ -15,9 +15,13 @@ public class CerrarIncidenciasView extends JFrame {
     private DefaultTableModel tableModel;
     private JButton btnCerrar;
 
+    // NUEVOS COMPONENTES LOGIN
+    private JTextField txtIdentificador;
+    private JButton btnAcceder;
+
     public CerrarIncidenciasView() {
         setTitle("Cerrar incidencias");
-        setSize(800, 400);
+        setSize(900, 450);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -28,6 +32,20 @@ public class CerrarIncidenciasView extends JFrame {
 
         setLayout(new BorderLayout());
 
+        // PANEL SUPERIOR (LOGIN)
+        JPanel panelTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        panelTop.add(new JLabel("Correo o DNI:"));
+
+        txtIdentificador = new JTextField(25);
+        panelTop.add(txtIdentificador);
+
+        btnAcceder = new JButton("Acceder");
+        panelTop.add(btnAcceder);
+
+        add(panelTop, BorderLayout.NORTH);
+
+        // TABLA
         String[] columnas = {"ID", "Tipo", "Descripción", "Zona", "Fecha", "Estado"};
 
         tableModel = new DefaultTableModel(columnas, 0) {
@@ -41,19 +59,25 @@ public class CerrarIncidenciasView extends JFrame {
 
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel panel = new JPanel();
+        // PANEL INFERIOR
+        JPanel panelBottom = new JPanel();
         btnCerrar = new JButton("Cerrar seleccionadas");
-        panel.add(btnCerrar);
+        panelBottom.add(btnCerrar);
 
-        add(panel, BorderLayout.SOUTH);
+        add(panelBottom, BorderLayout.SOUTH);
     }
 
-    // 🔐 LOGIN
-    public String pedirIdentificador() {
-        return JOptionPane.showInputDialog(this, "Introduce email o DNI:");
+    // OBTENER IDENTIFICADOR
+    public String getIdentificador() {
+        return txtIdentificador.getText();
     }
 
-    // 📋 TABLA
+    // ACCIÓN BOTÓN ACCEDER
+    public void setAccederAction(ActionListener l) {
+        btnAcceder.addActionListener(l);
+    }
+
+    // TABLA
     public void loadIncidencias(List<IncidenciaDisplayDTO> lista) {
 
         tableModel.setRowCount(0);
@@ -70,7 +94,7 @@ public class CerrarIncidenciasView extends JFrame {
         }
     }
 
-    // 🔢 SELECCIÓN
+    // SELECCIÓN
     public List<Long> getSelectedIds() {
 
         int[] filas = table.getSelectedRows();

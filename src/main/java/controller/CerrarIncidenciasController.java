@@ -22,24 +22,33 @@ public class CerrarIncidenciasController {
 
     public void initController() {
 
-        try {
-            String identificador = view.pedirIdentificador();
+        view.setVisible(true);
 
-            idTecnico = model.loginTecnico(identificador);
-            tipoResponsable = model.getTipoResponsable(idTecnico);
+        //LOGIN
+        view.setAccederAction(e -> {
+            try {
+                String identificador = view.getIdentificador();
 
-            view.setVisible(true);
+                idTecnico = model.loginTecnico(identificador);
+                tipoResponsable = model.getTipoResponsable(idTecnico);
 
-            cargarIncidencias();
+                cargarIncidencias();
 
-            view.setCerrarAction(e -> cerrar());
+            } catch (ApplicationException ex) {
+                view.showMessage(ex.getMessage());
+            }
+        });
 
-        } catch (ApplicationException e) {
-            view.showMessage(e.getMessage());
-        }
+        // CIERRE
+        view.setCerrarAction(e -> cerrar());
     }
 
     private void cargarIncidencias() {
+
+        if (tipoResponsable == null) {
+            return; // evita llamadas antes del login
+        }
+
         List<IncidenciaDisplayDTO> lista =
                 model.getIncidenciasResueltas(tipoResponsable);
 
@@ -47,6 +56,11 @@ public class CerrarIncidenciasController {
     }
 
     private void cerrar() {
+
+        if (tipoResponsable == null) {
+            view.showMessage("Debes iniciar sesión primero");
+            return;
+        }
 
         List<Long> ids = view.getSelectedIds();
 
