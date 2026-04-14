@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.ToolTipManager;
 import javax.swing.table.DefaultTableModel;
 
 public class ReaperturaIncidenciasView extends JFrame {
@@ -62,8 +64,23 @@ public class ReaperturaIncidenciasView extends JFrame {
             }
         };
 
-        tblIncidencias = new JTable(incidenciasTableModel);
+        tblIncidencias = new JTable(incidenciasTableModel) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public String getToolTipText(MouseEvent e) {
+                int row = rowAtPoint(e.getPoint());
+                int col = columnAtPoint(e.getPoint());
+
+                if (row >= 0 && col >= 0) {
+                    Object value = getValueAt(row, col);
+                    return value == null ? null : value.toString();
+                }
+                return null;
+            }
+        };
         tblIncidencias.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        ToolTipManager.sharedInstance().registerComponent(tblIncidencias);
 
         JScrollPane scrollTablaIncidencias = new JScrollPane(tblIncidencias);
         scrollTablaIncidencias.setBorder(BorderFactory.createTitledBorder("Listado de incidencias"));
@@ -87,8 +104,23 @@ public class ReaperturaIncidenciasView extends JFrame {
             }
         };
 
-        tblHistorial = new JTable(historialTableModel);
+        tblHistorial = new JTable(historialTableModel) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public String getToolTipText(MouseEvent e) {
+                int row = rowAtPoint(e.getPoint());
+                int col = columnAtPoint(e.getPoint());
+
+                if (row >= 0 && col >= 0) {
+                    Object value = getValueAt(row, col);
+                    return value == null ? null : value.toString();
+                }
+                return null;
+            }
+        };
         tblHistorial.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        ToolTipManager.sharedInstance().registerComponent(tblHistorial);
 
         JScrollPane scrollHistorial = new JScrollPane(tblHistorial);
         scrollHistorial.setBorder(BorderFactory.createTitledBorder("Historial de estados y comentarios"));
