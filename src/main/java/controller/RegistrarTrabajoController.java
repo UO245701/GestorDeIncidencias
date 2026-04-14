@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.List;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -9,6 +11,7 @@ import model.RegistrarTrabajoModel;
 import model.IncidenciaListadoDTO;
 import model.HistorialDTO;
 import view.RegistrarTrabajoView;
+import util.ApplicationException;
 
 public class RegistrarTrabajoController {
 
@@ -68,11 +71,11 @@ public class RegistrarTrabajoController {
 
         List<HistorialDTO> trabajos = model.getTrabajos(idIncidencia);
 
-        DefaultTableModel model = view.getTrabajosModel();
-        model.setRowCount(0); // limpiar tabla
+        DefaultTableModel table = view.getTrabajosModel();
+        table.setRowCount(0);
 
         for (HistorialDTO h : trabajos) {
-            model.addRow(new Object[]{
+            table.addRow(new Object[]{
                 h.getFechaHora(),
                 h.getDetalle()
             });
@@ -88,11 +91,37 @@ public class RegistrarTrabajoController {
                     view.getTableModel().getValueAt(fila, 0).toString()
             );
 
-            String texto = view.getTxtNuevoTrabajo().getText();
+            String texto = view.getTxtNuevoTrabajo().getText().trim();
+            String fecha = view.getTxtFecha().getText().trim();
 
-            model.addTrabajo(idIncidencia, idTecnico, texto);
+            // Validación descripción
+            if (texto.isEmpty()) {
+                throw new ApplicationException("La descripción del trabajo es obligatoria");
+            }
+
+            // Validación fecha REAL
+            if (fecha.isEmpty()) {
+                throw new ApplicationException("La fecha es obligatoria");
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            sdf.setLenient(false); // clave
+
+            Date fechaParseada;
+
+            try {
+                fechaParseada = sdf.parse(fecha);
+            } catch (Exception e) {
+                throw new ApplicationException(
+                    "Fecha inválida. Formato correcto: yyyy-MM-dd HH:mm (ej: 2026-03-25 18:30)"
+                );
+            }
+
+            // Guardar (usamos el string original ya validado)
+            model.addTrabajo(idIncidencia, idTecnico, texto, fecha);
 
             view.getTxtNuevoTrabajo().setText("");
+            view.getTxtFecha().setText("");
 
             mostrarTrabajos();
 
