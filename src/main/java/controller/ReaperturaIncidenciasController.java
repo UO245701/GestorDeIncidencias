@@ -137,20 +137,19 @@ public class ReaperturaIncidenciasController {
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(
-                view,
-                "¿Desea reabrir la incidencia seleccionada?",
-                "Confirmar reapertura",
-                JOptionPane.YES_NO_OPTION
-        );
-
-        if (confirm != JOptionPane.YES_OPTION) {
-            return;
-        }
-
         model.reabrirIncidencia(idIncidencia, identificadorValidado, motivo);
 
-        view.showMessage("La incidencia ha sido reabierta correctamente.");
+        String fechaHoraReapertura = java.time.LocalDateTime.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+
+        String mensaje = "La incidencia se ha reabierto correctamente.\n\n"
+                + "ID de la incidencia: " + idIncidencia + "\n"
+                + "Nuevo estado: REABIERTA\n"
+                + "Motivo de reapertura: " + motivo + "\n"
+                + "Fecha y hora: " + fechaHoraReapertura;
+
+        view.showMessage(mensaje);
+
         cargarListadoIncidencias();
     }
 }
