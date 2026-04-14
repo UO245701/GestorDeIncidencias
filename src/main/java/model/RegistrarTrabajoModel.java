@@ -10,7 +10,6 @@ public class RegistrarTrabajoModel {
     private final Database db = new Database();
 
     public long getIdTecnico(String input) {
-
         String sql = "SELECT id_persona FROM Persona WHERE (email=? OR dni=?) AND tipo='TECNICO'";
 
         List<Object[]> rows = db.executeQueryArray(sql, input, input);
@@ -23,20 +22,21 @@ public class RegistrarTrabajoModel {
     }
 
     public List<IncidenciaListadoDTO> getIncidencias(long idTecnico) {
-
         String sql = ""
-                + "SELECT id_incidencia AS id, "
-                + "       tipo, "
-                + "       descripcion, "
-                + "       estado "
-                + "FROM Incidencia "
-                + "WHERE fk_tecnico=? AND estado='EN CURSO'";
+                + "SELECT DISTINCT i.id_incidencia AS id, "
+                + "       i.tipo, "
+                + "       i.descripcion, "
+                + "       i.estado "
+                + "FROM Incidencia i "
+                + "LEFT JOIN IncidenciaTecnico it ON i.id_incidencia = it.fk_incidencia "
+                + "WHERE (i.fk_tecnico = ? OR it.fk_tecnico = ?) "
+                + "AND i.estado = 'EN CURSO' "
+                + "ORDER BY i.id_incidencia ASC";
 
-        return db.executeQueryPojo(IncidenciaListadoDTO.class, sql, idTecnico);
+        return db.executeQueryPojo(IncidenciaListadoDTO.class, sql, idTecnico, idTecnico);
     }
 
     public List<HistorialDTO> getTrabajos(long idIncidencia) {
-
         String sql = ""
                 + "SELECT detalle, fecha_hora AS fechaHora "
                 + "FROM Historial "
@@ -47,7 +47,6 @@ public class RegistrarTrabajoModel {
     }
 
     public void addTrabajo(long idIncidencia, long idTecnico, String detalle) {
-
         String sql = ""
                 + "INSERT INTO Historial (fecha_hora, estado, accion, detalle, fk_incidencia, fk_persona) "
                 + "VALUES (datetime('now','localtime'), 'EN CURSO', 'TRABAJO', ?, ?, ?)";

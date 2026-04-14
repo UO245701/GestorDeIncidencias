@@ -25,8 +25,10 @@ public class ResolverIncidenciaModel {
         return ((Number) rows.get(0)[0]).intValue();
     }
 
+    // Mostrar incidencias EN CURSO del técnico:
+    // tanto antiguas (fk_tecnico) como nuevas (IncidenciaTecnico)
     public List<IncidenciaDisplayDTO> getIncidenciasEnCurso(int idTecnico) {
-        String sql = "SELECT i.id_incidencia as id, "
+        String sql = "SELECT DISTINCT i.id_incidencia as id, "
                    + "i.tipo, "
                    + "i.descripcion, "
                    + "z.nombre as localizacion, "
@@ -38,32 +40,30 @@ public class ResolverIncidenciaModel {
                    + "FROM Incidencia i "
                    + "JOIN Persona p ON i.fk_ciudadano = p.id_persona "
                    + "JOIN Zona z ON z.id_zona = i.fk_zona "
-                   + "WHERE i.fk_tecnico = ? "
+                   + "LEFT JOIN IncidenciaTecnico it ON i.id_incidencia = it.fk_incidencia "
+                   + "WHERE (i.fk_tecnico = ? OR it.fk_tecnico = ?) "
                    + "AND i.estado = 'EN CURSO' "
                    + "ORDER BY i.fecha_hora ASC";
 
-        return db.executeQueryPojo(IncidenciaDisplayDTO.class, sql, idTecnico);
+        return db.executeQueryPojo(IncidenciaDisplayDTO.class, sql, idTecnico, idTecnico);
     }
 
- // Obtener precio/hora del técnico
     public double getPrecioHoraTecnico(int idTecnico) {
         String sql = "SELECT precio_hora FROM Persona WHERE id_persona = ?";
         List<Object[]> rows = db.executeQueryArray(sql, idTecnico);
-        
+
         if (rows.isEmpty() || rows.get(0)[0] == null) {
-            return 25.0; // Precio por defecto si falla
+            return 25.0;
         }
         return Double.parseDouble(rows.get(0)[0].toString());
     }
 
-    // MÉTODO ACTUALIZADO: Resolver con costes
-    public void resolverIncidencia(int idIncidencia, int idTecnico, int tiempoReal, String trabajosRealizados, 
+    public void resolverIncidencia(int idIncidencia, int idTecnico, int tiempoReal, String trabajosRealizados,
                                    double costeMateriales, String descripcionMateriales, double costeTotal) {
-        
+
         validarDatosResolucion(idIncidencia, idTecnico, tiempoReal, trabajosRealizados);
         asegurarQueLaIncidenciaEsDelTecnicoYEstaEnCurso(idIncidencia, idTecnico);
 
-        // 1. Actualizamos la incidencia con los nuevos campos de costes
         String updateIncidencia = "UPDATE Incidencia "
                                 + "SET tiempo_real = ?, "
                                 + "trabajos_realizados = ?, "
@@ -73,10 +73,9 @@ public class ResolverIncidenciaModel {
                                 + "estado = 'RESUELTA' "
                                 + "WHERE id_incidencia = ?";
 
-        db.executeUpdate(updateIncidencia, tiempoReal, trabajosRealizados.trim(), 
+        db.executeUpdate(updateIncidencia, tiempoReal, trabajosRealizados.trim(),
                          costeMateriales, descripcionMateriales, costeTotal, idIncidencia);
 
-        // 2. Insertamos en el historial un desglose completo
         String insertHistorial = "INSERT INTO Historial "
                                + "(fecha_hora, estado, accion, detalle, fk_incidencia, fk_persona) "
                                + "VALUES (datetime('now','localtime'), 'RESUELTA', 'RESOLVER INCIDENCIA', ?, ?, ?)";
@@ -89,14 +88,17 @@ public class ResolverIncidenciaModel {
         db.executeUpdate(insertHistorial, detalle, idIncidencia, idTecnico);
     }
 
+    // Validación mixta:
+    // acepta incidencias antiguas (fk_tecnico) y nuevas (IncidenciaTecnico)
     private void asegurarQueLaIncidenciaEsDelTecnicoYEstaEnCurso(int idIncidencia, int idTecnico) {
-        String sql = "SELECT id_incidencia "
-                   + "FROM Incidencia "
-                   + "WHERE id_incidencia = ? "
-                   + "AND fk_tecnico = ? "
-                   + "AND estado = 'EN CURSO'";
+        String sql = "SELECT DISTINCT i.id_incidencia "
+                   + "FROM Incidencia i "
+                   + "LEFT JOIN IncidenciaTecnico it ON i.id_incidencia = it.fk_incidencia "
+                   + "WHERE i.id_incidencia = ? "
+                   + "AND (i.fk_tecnico = ? OR it.fk_tecnico = ?) "
+                   + "AND i.estado = 'EN CURSO'";
 
-        List<Object[]> rows = db.executeQueryArray(sql, idIncidencia, idTecnico);
+        List<Object[]> rows = db.executeQueryArray(sql, idIncidencia, idTecnico, idTecnico);
 
         if (rows.isEmpty()) {
             throw new ApplicationException(

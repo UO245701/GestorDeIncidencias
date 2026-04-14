@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS Historial;
+DROP TABLE IF EXISTS IncidenciaTecnico;
 DROP TABLE IF EXISTS Incidencia;
 DROP TABLE IF EXISTS Zona;
 DROP TABLE IF EXISTS Persona;
@@ -13,6 +14,7 @@ CREATE TABLE Persona (
     apellidos TEXT,
     dni TEXT UNIQUE,
     email TEXT UNIQUE,
+    precio_hora REAL DEFAULT 25.0,
     CHECK (
         tipo_responsable IS NULL 
         OR tipo = 'TECNICO'
@@ -36,9 +38,23 @@ CREATE TABLE Incidencia (
     fk_ciudadano INTEGER NOT NULL,
     fk_tecnico INTEGER,
     fk_zona INTEGER NOT NULL,
+    tiempo_real INTEGER,
+    trabajos_realizados TEXT,
+    coste_materiales REAL DEFAULT 0.0,
+    descripcion_materiales TEXT,
+    coste_total REAL DEFAULT 0.0,
     FOREIGN KEY (fk_ciudadano) REFERENCES Persona(id_persona),
     FOREIGN KEY (fk_tecnico) REFERENCES Persona(id_persona),
     FOREIGN KEY (fk_zona) REFERENCES Zona(id_zona)
+);
+
+CREATE TABLE IncidenciaTecnico (
+    fk_incidencia INTEGER NOT NULL,
+    fk_tecnico INTEGER NOT NULL,
+    fecha_asignacion DATETIME DEFAULT (datetime('now','localtime')),
+    PRIMARY KEY (fk_incidencia, fk_tecnico),
+    FOREIGN KEY (fk_incidencia) REFERENCES Incidencia(id_incidencia),
+    FOREIGN KEY (fk_tecnico) REFERENCES Persona(id_persona)
 );
 
 CREATE TABLE Historial (
@@ -52,14 +68,3 @@ CREATE TABLE Historial (
     FOREIGN KEY (fk_incidencia) REFERENCES Incidencia(id_incidencia),
     FOREIGN KEY (fk_persona) REFERENCES Persona(id_persona)
 );
-
-ALTER TABLE Incidencia ADD COLUMN tiempo_real INTEGER;
-ALTER TABLE Incidencia ADD COLUMN trabajos_realizados TEXT;
-
--- Añadimos el precio por hora a los técnicos (por defecto 25€/h para no dejarlo vacío)
-ALTER TABLE Persona ADD COLUMN precio_hora REAL DEFAULT 25.0;
-
--- Añadimos las columnas de costes a la incidencia
-ALTER TABLE Incidencia ADD COLUMN coste_materiales REAL DEFAULT 0.0;
-ALTER TABLE Incidencia ADD COLUMN descripcion_materiales TEXT;
-ALTER TABLE Incidencia ADD COLUMN coste_total REAL DEFAULT 0.0;
