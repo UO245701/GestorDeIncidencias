@@ -108,3 +108,23 @@ VALUES ('Limpieza', 'Graffiti en fachada del ayuntamiento', 1, datetime('now', '
 -- Incidencia 3: Para Lucía (RESUELTA hace 5 días, 200 minutos)
 INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, fk_ciudadano, fk_tecnico, tiempo_real, trabajos_realizados)
 VALUES ('Mobiliario urbano', 'Banco astillado en el parque', 2, datetime('now', '-5 days'), 'RESUELTA', 1, 6, 200, 'Sustitución de maderas y barnizado');
+
+
+-- Incidencia RECHAZADA 
+INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, fk_ciudadano) 
+VALUES ('Limpieza','Solicitud de limpieza de una zona privada interior de comunidad', 2, '2026-03-18 11:40:00','RECHAZADA', 1);
+
+-- Historial Incidencia Rechazada
+INSERT INTO Historial (fecha_hora, estado, accion, detalle, fk_incidencia, fk_persona) VALUES
+('2026-03-18 11:40:00', 'NUEVA',      'CREACION',   'La ciudadana registró una solicitud de limpieza', 15, 1),
+('2026-03-18 12:15:00', 'RECHAZADA',  'RECHAZO',    'La operadora rechazó la incidencia por tratarse de un espacio privado fuera del servicio municipal', 15, 4);
+
+
+-- Historial Incidencia CERRADA 
+INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) VALUES
+('NUEVA', 'CREACION', 'El ciudadano registró el aviso de graffiti en fachada', 13, 1),
+('VALIDADA', 'VALIDACION', 'La operadora validó la incidencia', 13, 4),
+('ASIGNADA', 'ASIGNACION', 'La operadora asignó la incidencia al técnico Roberto', 13, 4),
+('EN CURSO', 'INICIO_REPARACION', 'El técnico inició la limpieza de la fachada', 13, 5),
+('RESUELTA', 'FINALIZACION', 'El técnico eliminó el graffiti con limpieza a presión', 13, 5),
+('CERRADA', 'CIERRE', 'La operadora cerró la incidencia tras comprobar el resultado', 13, 4);

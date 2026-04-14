@@ -36,9 +36,11 @@ import model.InformeMensualModel;
 import view.ConsultarIncidenciasView;
 import view.InformeMensualView;
 import controller.ListadoIncidenciasPeriodoController;
+import controller.ReaperturaIncidenciasController;
 import model.ListadoIncidenciasPeriodoModel;
+import model.ReaperturaIncidenciasModel;
 import view.ListadoIncidenciasPeriodoView;
-
+import view.ReaperturaIncidenciasView;
 import controller.CerrarIncidenciasController;
 import model.CerrarIncidenciasModel;
 import view.CerrarIncidenciasView;
@@ -209,6 +211,17 @@ public class SwingMain {
 		    new InformeMensualController(m, v).initController();
 		});
 		frame.getContentPane().add(btnInformeMensual);
+		
+		
+		JButton btnReaperturaIncidencias = new JButton("Reabrir incidencias");
+
+		btnReaperturaIncidencias.addActionListener(e -> {
+		    ReaperturaIncidenciasView v = new ReaperturaIncidenciasView();
+		    ReaperturaIncidenciasModel m = new ReaperturaIncidenciasModel();
+		    new ReaperturaIncidenciasController(m, v).initController();
+		});
+
+		frame.getContentPane().add(btnReaperturaIncidencias);
 	}
 
 	public JFrame getFrame() { return this.frame; }
