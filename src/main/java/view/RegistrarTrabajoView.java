@@ -17,6 +17,7 @@ public class RegistrarTrabajoView {
     private DefaultTableModel trabajosModel;
     private JTextArea txtNuevoTrabajo;
     private JButton btnAñadir;
+    private JTextField txtFecha;
 
     public RegistrarTrabajoView() {
         initialize();
@@ -30,12 +31,11 @@ public class RegistrarTrabajoView {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout());
 
-        // 🔹 PANEL PRINCIPAL VERTICAL
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
         // =======================
-        //TOP (IDENTIFICACIÓN)
+        // TOP (IDENTIFICACIÓN)
         // =======================
         JPanel top = new JPanel();
 
@@ -49,7 +49,7 @@ public class RegistrarTrabajoView {
         mainPanel.add(top);
 
         // =======================
-        //INCIDENCIAS
+        // INCIDENCIAS
         // =======================
         JPanel panelIncidencias = new JPanel(new BorderLayout());
         panelIncidencias.setBorder(BorderFactory.createTitledBorder("Incidencias en curso"));
@@ -59,14 +59,13 @@ public class RegistrarTrabajoView {
         );
 
         tablaIncidencias = new JTable(tableModel);
-
         panelIncidencias.add(new JScrollPane(tablaIncidencias), BorderLayout.CENTER);
         panelIncidencias.setPreferredSize(new java.awt.Dimension(800, 200));
 
         mainPanel.add(panelIncidencias);
 
         // =======================
-        //TRABAJOS PREVIOS
+        // TRABAJOS REGISTRADOS
         // =======================
         JPanel panelTrabajos = new JPanel(new BorderLayout());
         panelTrabajos.setBorder(BorderFactory.createTitledBorder("Trabajos registrados"));
@@ -76,11 +75,13 @@ public class RegistrarTrabajoView {
         );
 
         tablaTrabajos = new JTable(trabajosModel);
-        
+
+        // Renderer para texto largo
         tablaTrabajos.getColumnModel()
-        .getColumn(1) // columna descripción
-        .setCellRenderer(new TextAreaRenderer());
-        
+                .getColumn(1)
+                .setCellRenderer(new TextAreaRenderer());
+
+        // Tamaño columnas
         tablaTrabajos.getColumnModel().getColumn(0).setPreferredWidth(150);
         tablaTrabajos.getColumnModel().getColumn(1).setPreferredWidth(600);
 
@@ -90,31 +91,49 @@ public class RegistrarTrabajoView {
         mainPanel.add(panelTrabajos);
 
         // =======================
-        //NUEVO TRABAJO
+        // NUEVO TRABAJO
         // =======================
         JPanel panelNuevo = new JPanel(new BorderLayout());
         panelNuevo.setBorder(BorderFactory.createTitledBorder("Nuevo trabajo"));
 
+        // PANEL SUPERIOR (FECHA)
+        JPanel panelFecha = new JPanel(new BorderLayout());
+        panelFecha.add(new JLabel("Fecha (yyyy-MM-dd HH:mm):"), BorderLayout.NORTH);
+
+        txtFecha = new JTextField();
+        panelFecha.add(txtFecha, BorderLayout.CENTER);
+
+        // PANEL CENTRAL (DESCRIPCIÓN)
+        JPanel panelDescripcion = new JPanel(new BorderLayout());
+        panelDescripcion.add(new JLabel("Descripción:"), BorderLayout.NORTH);
+
         txtNuevoTrabajo = new JTextArea(3, 20);
+        panelDescripcion.add(new JScrollPane(txtNuevoTrabajo), BorderLayout.CENTER);
+
+        // BOTÓN
         btnAñadir = new JButton("Añadir trabajo");
 
-        panelNuevo.add(new JScrollPane(txtNuevoTrabajo), BorderLayout.CENTER);
+        
+        panelNuevo.add(panelFecha, BorderLayout.NORTH);
+        panelNuevo.add(panelDescripcion, BorderLayout.CENTER);
         panelNuevo.add(btnAñadir, BorderLayout.SOUTH);
 
         mainPanel.add(panelNuevo);
 
-        //SCROLL GENERAL
+        // SCROLL GENERAL
         frame.getContentPane().add(new JScrollPane(mainPanel), BorderLayout.CENTER);
     }
 
+    // =======================
+    // GETTERS
+    // =======================
     public JFrame getFrame() { return frame; }
     public JTextField getTxtIdentificacion() { return txtIdentificacion; }
     public JButton getBtnCargar() { return btnCargar; }
     public JTable getTablaIncidencias() { return tablaIncidencias; }
     public DefaultTableModel getTableModel() { return tableModel; }
-    public DefaultTableModel getTrabajosModel() {return trabajosModel;}
+    public DefaultTableModel getTrabajosModel() { return trabajosModel; }
     public JTextArea getTxtNuevoTrabajo() { return txtNuevoTrabajo; }
     public JButton getBtnAñadir() { return btnAñadir; }
-    
-    
+    public JTextField getTxtFecha() { return txtFecha; }
 }

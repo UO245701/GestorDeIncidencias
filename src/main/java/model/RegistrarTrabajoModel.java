@@ -46,11 +46,11 @@ public class RegistrarTrabajoModel {
         return db.executeQueryPojo(HistorialDTO.class, sql, idIncidencia);
     }
 
-    public void addTrabajo(long idIncidencia, long idTecnico, String detalle) {
+    public void addTrabajo(long idIncidencia, long idTecnico, String detalle, String fechaHora) {
         String sql = ""
                 + "INSERT INTO Historial (fecha_hora, estado, accion, detalle, fk_incidencia, fk_persona) "
-                + "VALUES (datetime('now','localtime'), 'EN CURSO', 'TRABAJO', ?, ?, ?)";
+                + "VALUES (?, 'EN CURSO', 'TRABAJO', ?, ?, ?)";
 
-        db.executeUpdate(sql, detalle, idIncidencia, idTecnico);
+        db.executeUpdate(sql, fechaHora, detalle, idIncidencia, idTecnico);
     }
 }
