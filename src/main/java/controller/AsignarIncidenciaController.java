@@ -131,11 +131,18 @@ public class AsignarIncidenciaController {
 
         model.asignarTecnicosAIncidencia(idIncidencia, idsTecnicos);
 
-        for (String tecnico : nombresTecnicos) {
-            String detalleHistorial = "La operadora " + nombreOperadora
-                    + " asignó el trabajo a " + tecnico;
-            model.registrarEnHistorial(idIncidencia, operadorActual.getId(), detalleHistorial);
+        String listaTecnicos = construirListaTecnicos(nombresTecnicos);
+
+        String detalleHistorial;
+        if (nombresTecnicos.size() == 1) {
+            detalleHistorial = "La operadora " + nombreOperadora
+                    + " asignó la incidencia al técnico: " + listaTecnicos;
+        } else {
+            detalleHistorial = "La operadora " + nombreOperadora
+                    + " asignó la incidencia a los técnicos: " + listaTecnicos;
         }
+
+        model.registrarEnHistorial(idIncidencia, operadorActual.getId(), detalleHistorial);
 
         JOptionPane.showMessageDialog(view,
                 "Incidencia " + idIncidencia + " (" + tipoIncidencia + ") asignada correctamente.\n\n"
@@ -147,5 +154,29 @@ public class AsignarIncidenciaController {
                 JOptionPane.INFORMATION_MESSAGE);
 
         cargarDatos();
+    }
+
+    private String construirListaTecnicos(List<String> nombresTecnicos) {
+        if (nombresTecnicos == null || nombresTecnicos.isEmpty()) {
+            return "";
+        }
+
+        if (nombresTecnicos.size() == 1) {
+            return nombresTecnicos.get(0);
+        }
+
+        if (nombresTecnicos.size() == 2) {
+            return nombresTecnicos.get(0) + " y " + nombresTecnicos.get(1);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < nombresTecnicos.size(); i++) {
+            if (i == nombresTecnicos.size() - 1) {
+                sb.append("y ").append(nombresTecnicos.get(i));
+            } else {
+                sb.append(nombresTecnicos.get(i)).append(", ");
+            }
+        }
+        return sb.toString();
     }
 }
