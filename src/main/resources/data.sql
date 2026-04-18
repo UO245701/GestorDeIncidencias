@@ -3,6 +3,7 @@
 -- =========================
 delete from historial;
 delete from incidencia;
+delete from PresupuestoTipoIncidencia;
 delete from zona;
 delete from persona;
 

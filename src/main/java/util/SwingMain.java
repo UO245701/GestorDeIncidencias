@@ -48,6 +48,9 @@ import view.CerrarIncidenciasView;
 import controller.RegistrarTrabajoController;
 import model.RegistrarTrabajoModel;
 import view.RegistrarTrabajoView;
+import controller.PresupuestoTipoIncidenciaController;
+import model.PresupuestoTipoIncidenciaModel;
+import view.PresupuestoTipoIncidenciaView;
 
 public class SwingMain {
 
@@ -144,6 +147,14 @@ public class SwingMain {
 			}
 		});
 		frame.getContentPane().add(btnAsignarIncidencia);
+
+		JButton btnPresupuestos = new JButton("Definir presupuestos por tipo");
+		btnPresupuestos.addActionListener(e -> {
+		    PresupuestoTipoIncidenciaView v = new PresupuestoTipoIncidenciaView();
+		    PresupuestoTipoIncidenciaModel m = new PresupuestoTipoIncidenciaModel();
+		    new PresupuestoTipoIncidenciaController(m, v).initController();
+		});
+		frame.getContentPane().add(btnPresupuestos);
 
 		JButton btnTecnico = new JButton("Abrir Panel de Técnico");
 		btnTecnico.addActionListener(e -> {

@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS Historial;
+DROP TABLE IF EXISTS PresupuestoTipoIncidencia;
 DROP TABLE IF EXISTS Incidencia;
 DROP TABLE IF EXISTS Zona;
 DROP TABLE IF EXISTS Persona;
@@ -63,3 +64,18 @@ ALTER TABLE Persona ADD COLUMN precio_hora REAL DEFAULT 25.0;
 ALTER TABLE Incidencia ADD COLUMN coste_materiales REAL DEFAULT 0.0;
 ALTER TABLE Incidencia ADD COLUMN descripcion_materiales TEXT;
 ALTER TABLE Incidencia ADD COLUMN coste_total REAL DEFAULT 0.0;
+
+CREATE TABLE PresupuestoTipoIncidencia (
+    id_presupuesto INTEGER PRIMARY KEY AUTOINCREMENT,
+    tipo TEXT NOT NULL,
+    importe_maximo REAL NOT NULL CHECK (importe_maximo > 0),
+    importe_consumido REAL NOT NULL DEFAULT 0.0 CHECK (importe_consumido >= 0),
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL,
+    activo INTEGER NOT NULL DEFAULT 1 CHECK (activo IN (0, 1)),
+    CHECK (date(fecha_fin) >= date(fecha_inicio))
+);
+
+CREATE UNIQUE INDEX ux_presupuesto_tipo_activo
+ON PresupuestoTipoIncidencia(tipo)
+WHERE activo = 1;
