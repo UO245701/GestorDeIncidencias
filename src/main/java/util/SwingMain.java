@@ -51,6 +51,9 @@ import view.RegistrarTrabajoView;
 import controller.PresupuestoTipoIncidenciaController;
 import model.PresupuestoTipoIncidenciaModel;
 import view.PresupuestoTipoIncidenciaView;
+import controller.ExportacionHistorialController;
+import model.ExportacionHistorialModel;
+import view.ExportacionHistorialView;
 
 public class SwingMain {
 
@@ -155,6 +158,14 @@ public class SwingMain {
 		    new PresupuestoTipoIncidenciaController(m, v).initController();
 		});
 		frame.getContentPane().add(btnPresupuestos);
+
+		JButton btnExportarHistorial = new JButton("Exportar historial de incidencias");
+		btnExportarHistorial.addActionListener(e -> {
+		    ExportacionHistorialView v = new ExportacionHistorialView();
+		    ExportacionHistorialModel m = new ExportacionHistorialModel();
+		    new ExportacionHistorialController(m, v).initController();
+		});
+		frame.getContentPane().add(btnExportarHistorial);
 
 		JButton btnTecnico = new JButton("Abrir Panel de Técnico");
 		btnTecnico.addActionListener(e -> {
