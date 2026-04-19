@@ -18,6 +18,8 @@ public class CerrarIncidenciasView extends JFrame {
     // NUEVOS COMPONENTES LOGIN
     private JTextField txtIdentificador;
     private JButton btnAcceder;
+    
+    private JTextField txtCosteReal;
 
     public CerrarIncidenciasView() {
         setTitle("Cerrar incidencias");
@@ -55,13 +57,18 @@ public class CerrarIncidenciasView extends JFrame {
         };
 
         table = new JTable(tableModel);
-        table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         // PANEL INFERIOR
-        JPanel panelBottom = new JPanel();
-        btnCerrar = new JButton("Cerrar seleccionadas");
+        JPanel panelBottom = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
+        
+        panelBottom.add(new JLabel("Coste Real a imputar (€): *Obligatorio*"));
+        txtCosteReal = new JTextField(10);
+        panelBottom.add(txtCosteReal);
+        
+        btnCerrar = new JButton("Cerrar incidencia seleccionada");
         panelBottom.add(btnCerrar);
 
         add(panelBottom, BorderLayout.SOUTH);
@@ -70,6 +77,15 @@ public class CerrarIncidenciasView extends JFrame {
     // OBTENER IDENTIFICADOR
     public String getIdentificador() {
         return txtIdentificador.getText();
+    }
+    
+ // OBTENER COSTE REAL
+    public String getCosteReal() {
+        return txtCosteReal.getText();
+    }
+    
+    public void limpiarCosteReal() {
+    	txtCosteReal.setText("");
     }
 
     // ACCIÓN BOTÓN ACCEDER
@@ -92,6 +108,15 @@ public class CerrarIncidenciasView extends JFrame {
                     i.getEstado()
             });
         }
+    }
+    
+ // SELECCIÓN DEL TIPO (Para saber qué presupuesto mirar)
+    public String getTipoSeleccionado() {
+        int fila = table.getSelectedRow();
+        if (fila != -1) {
+            return (String) tableModel.getValueAt(fila, 1);
+        }
+        return null;
     }
 
     // SELECCIÓN
@@ -119,5 +144,9 @@ public class CerrarIncidenciasView extends JFrame {
 
     public void showMessage(String msg) {
         JOptionPane.showMessageDialog(this, msg);
+    }
+    
+    public void showError(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Error de validación", JOptionPane.ERROR_MESSAGE);
     }
 }

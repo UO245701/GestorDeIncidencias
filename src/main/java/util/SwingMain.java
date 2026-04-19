@@ -1,9 +1,14 @@
 package util;
 
 import java.awt.EventQueue;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 import controller.AsignarIncidenciaController;
 import controller.RegistrarIncidenciaController;
@@ -77,174 +82,170 @@ public class SwingMain {
 	}
 
 	private void initialize() {
-		frame = new JFrame();
-		frame.setTitle("Main");
-		frame.setBounds(0, 0, 400, 250);
-		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+        frame = new JFrame();
+        frame.setTitle("Gestor de Incidencias - Menú Principal");
+        // Hacemos la ventana más grande y la centramos
+        frame.setSize(850, 600);
+        frame.setLocationRelativeTo(null); 
+        frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        
+        // Usamos un GridLayout de 2 filas y 3 columnas con márgenes (Gaps) de 10px
+        frame.getContentPane().setLayout(new GridLayout(2, 3, 10, 10));
+        ((JPanel)frame.getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		JButton btnRegistrarIncidencia = new JButton("Registrar incidencia");
-		btnRegistrarIncidencia.addActionListener(new ActionListener() { //NOSONAR
-			public void actionPerformed(ActionEvent e) {
-				RegistrarIncidenciaController controller =
-						new RegistrarIncidenciaController(new RegistrarIncidenciasModel(), new RegistrarIncidenciaView());
-				controller.initController();
-			}
-		});
-		
-		JButton btnConsultarMisIncidencias = new JButton("Consultar mis incidencias");
-		btnConsultarMisIncidencias.addActionListener(new ActionListener() { //NOSONAR
-			public void actionPerformed(ActionEvent e) {
-				ConsultarIncidenciasController controller =
-						new ConsultarIncidenciasController(new ConsultarIncidenciasModel(), new ConsultarIncidenciasView());
-				controller.initController();
-			}
-		});
-		
-		JButton btnHistorial = new JButton("Visualizar historial");
-		btnHistorial.addActionListener(e -> {
-		    VisualizarHistorialController controller =
-		        new VisualizarHistorialController(
-		            new VisualizarHistorialModel(),
-		            new VisualizarHistorialView());
-		    controller.initController();
-		});
-		frame.getContentPane().add(btnHistorial);
-		
-		frame.getContentPane().add(btnConsultarMisIncidencias);
-		frame.getContentPane().add(btnRegistrarIncidencia);
+        // ==========================================
+        // PANEL 1: CIUDADANO
+        // ==========================================
+        JPanel panelCiudadano = crearPanelAgrupado("Acciones de Ciudadano");
+        
+        JButton btnRegistrarIncidencia = new JButton("Registrar incidencia");
+        btnRegistrarIncidencia.addActionListener(e -> {
+            new RegistrarIncidenciaController(new RegistrarIncidenciasModel(), new RegistrarIncidenciaView()).initController();
+        });
+        
+        JButton btnConsultarMisIncidencias = new JButton("Consultar mis incidencias");
+        btnConsultarMisIncidencias.addActionListener(e -> {
+            new ConsultarIncidenciasController(new ConsultarIncidenciasModel(), new ConsultarIncidenciasView()).initController();
+        });
+        
+        panelCiudadano.add(btnRegistrarIncidencia);
+        panelCiudadano.add(btnConsultarMisIncidencias);
+        frame.getContentPane().add(panelCiudadano);
 
-		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
-		btnInicializarBaseDeDatos.addActionListener(new ActionListener() { //NOSONAR
-			public void actionPerformed(ActionEvent e) {
-				Database db = new Database();
-				db.createDatabase(false);
-			}
-		});
-		frame.getContentPane().add(btnInicializarBaseDeDatos);
+        // ==========================================
+        // PANEL 2: OPERADOR
+        // ==========================================
+        JPanel panelOperador = crearPanelAgrupado("Acciones de Operador");
+        
+        JButton btnValidar = new JButton("Validar Incidencias (Operador)");
+        btnValidar.addActionListener(e -> {
+            new ValidarIncidenciaController(new ValidarIncidenciasModel(), new ValidarIncidenciaView()).initController();
+        });
+        
+        JButton btnAsignarIncidencia = new JButton("Asignar incidencia");
+        btnAsignarIncidencia.addActionListener(e -> {
+            new AsignarIncidenciaController(new AsignarIncidenciaModel(), new AsignarIncidenciaView()).initController();
+        });
+        
+        panelOperador.add(btnValidar);
+        panelOperador.add(btnAsignarIncidencia);
+        frame.getContentPane().add(panelOperador);
 
-		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales para Pruebas");
-		btnCargarDatosIniciales.addActionListener(new ActionListener() { //NOSONAR
-			public void actionPerformed(ActionEvent e) {
-				Database db = new Database();
-				db.createDatabase(false);
-				db.loadDatabase();
-			}
-		});
-		frame.getContentPane().add(btnCargarDatosIniciales);
-		
-		JButton btnValidar = new JButton("Validar Incidencias (Operador)");
-		btnValidar.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        new ValidarIncidenciaController(new ValidarIncidenciasModel(), new ValidarIncidenciaView()).initController();
-		    }
-		});
-		frame.getContentPane().add(btnValidar);
-		
-		JButton btnAsignarIncidencia = new JButton("Asignar incidencia");
-		btnAsignarIncidencia.addActionListener(new ActionListener() { //NOSONAR
-			public void actionPerformed(ActionEvent e) {
-				AsignarIncidenciaController controller =
-						new AsignarIncidenciaController(new AsignarIncidenciaModel(), new AsignarIncidenciaView());
-				controller.initController();
-			}
-		});
-		frame.getContentPane().add(btnAsignarIncidencia);
+        // ==========================================
+        // PANEL 3: TÉCNICO
+        // ==========================================
+        JPanel panelTecnico = crearPanelAgrupado("Acciones de Técnico");
+        
+        JButton btnTecnico = new JButton("Abrir Panel de Técnico");
+        btnTecnico.addActionListener(e -> {
+            new TecnicoController(new TecnicoModel(), new TecnicoView()).initController();
+        });
+        
+        JButton btnResolverIncidencia = new JButton("Resolver incidencia");
+        btnResolverIncidencia.addActionListener(e -> {
+            new ResolverIncidenciaController(new ResolverIncidenciaModel(), new ResolverIncidenciaView()).initController();
+        });
+        
+        JButton btnRegistrarTrabajo = new JButton("Registrar trabajos");
+        btnRegistrarTrabajo.addActionListener(e -> {
+            RegistrarTrabajoView v = new RegistrarTrabajoView();
+            new RegistrarTrabajoController(new RegistrarTrabajoModel(), v).initController();
+            v.getFrame().setVisible(true);
+        });
+        
+        panelTecnico.add(btnTecnico);
+        panelTecnico.add(btnResolverIncidencia);
+        panelTecnico.add(btnRegistrarTrabajo);
+        frame.getContentPane().add(panelTecnico);
 
-		JButton btnPresupuestos = new JButton("Definir presupuestos por tipo");
-		btnPresupuestos.addActionListener(e -> {
-		    PresupuestoTipoIncidenciaView v = new PresupuestoTipoIncidenciaView();
-		    PresupuestoTipoIncidenciaModel m = new PresupuestoTipoIncidenciaModel();
-		    new PresupuestoTipoIncidenciaController(m, v).initController();
-		});
-		frame.getContentPane().add(btnPresupuestos);
+        // ==========================================
+        // PANEL 4: GESTOR / RESPONSABLE
+        // ==========================================
+        JPanel panelGestor = crearPanelAgrupado("Gestión y Responsables");
+        
+        JButton btnPresupuestos = new JButton("Definir presupuestos por tipo");
+        btnPresupuestos.addActionListener(e -> {
+            new PresupuestoTipoIncidenciaController(new PresupuestoTipoIncidenciaModel(), new PresupuestoTipoIncidenciaView()).initController();
+        });
+        
+        JButton btnCerrarIncidencias = new JButton("Cerrar incidencias");
+        btnCerrarIncidencias.addActionListener(e -> {
+            new CerrarIncidenciasController(new CerrarIncidenciasModel(), new CerrarIncidenciasView()).initController();
+        });
+        
+        JButton btnReaperturaIncidencias = new JButton("Reabrir incidencias");
+        btnReaperturaIncidencias.addActionListener(e -> {
+            new ReaperturaIncidenciasController(new ReaperturaIncidenciasModel(), new ReaperturaIncidenciasView()).initController();
+        });
+        
+        panelGestor.add(btnPresupuestos);
+        panelGestor.add(btnCerrarIncidencias);
+        panelGestor.add(btnReaperturaIncidencias);
+        frame.getContentPane().add(panelGestor);
 
-		JButton btnExportarHistorial = new JButton("Exportar historial de incidencias");
-		btnExportarHistorial.addActionListener(e -> {
-		    ExportacionHistorialView v = new ExportacionHistorialView();
-		    ExportacionHistorialModel m = new ExportacionHistorialModel();
-		    new ExportacionHistorialController(m, v).initController();
-		});
-		frame.getContentPane().add(btnExportarHistorial);
+        // ==========================================
+        // PANEL 5: INFORMES E HISTORIAL
+        // ==========================================
+        JPanel panelInformes = crearPanelAgrupado("Informes e Historial");
+        
+        JButton btnHistorial = new JButton("Visualizar historial");
+        btnHistorial.addActionListener(e -> {
+            new VisualizarHistorialController(new VisualizarHistorialModel(), new VisualizarHistorialView()).initController();
+        });
+        
+        JButton btnListadoPeriodo = new JButton("Listado incidencias por periodo");
+        btnListadoPeriodo.addActionListener(e -> {
+            new ListadoIncidenciasPeriodoController(new ListadoIncidenciasPeriodoModel(), new ListadoIncidenciasPeriodoView()).initController();
+        });
+        
+        JButton btnInformeMensual = new JButton("Informe Mensual (Responsable)");
+        btnInformeMensual.addActionListener(e -> {
+            new InformeMensualController(new InformeMensualModel(), new InformeMensualView()).initController();
+        });
+        
+        JButton btnExportarHistorial = new JButton("Exportar historial de incidencias");
+        btnExportarHistorial.addActionListener(e -> {
+            new ExportacionHistorialController(new ExportacionHistorialModel(), new ExportacionHistorialView()).initController();
+        });
+        
+        panelInformes.add(btnHistorial);
+        panelInformes.add(btnListadoPeriodo);
+        panelInformes.add(btnInformeMensual);
+        panelInformes.add(btnExportarHistorial);
+        frame.getContentPane().add(panelInformes);
 
-		JButton btnTecnico = new JButton("Abrir Panel de Técnico");
-		btnTecnico.addActionListener(e -> {
-		    TecnicoView v = new TecnicoView();
-		    TecnicoModel m = new TecnicoModel();
-		    new TecnicoController(m, v).initController();
-		});
-		frame.getContentPane().add(btnTecnico);
-		
-		JButton btnResolverIncidencia = new JButton("Resolver incidencia");
-		btnResolverIncidencia.addActionListener(e -> {
-		    ResolverIncidenciaView v = new ResolverIncidenciaView();
-		    ResolverIncidenciaModel m = new ResolverIncidenciaModel();
-		    new ResolverIncidenciaController(m, v).initController();
-		});
-		frame.getContentPane().add(btnResolverIncidencia);
-		
-		JButton btnCerrarIncidencias = new JButton("Cerrar incidencias");
-
-		btnCerrarIncidencias.addActionListener(e -> {
-		    CerrarIncidenciasView v = new CerrarIncidenciasView();
-		    CerrarIncidenciasModel m = new CerrarIncidenciasModel();
-		    new CerrarIncidenciasController(m, v).initController();
-		});
-
-		frame.getContentPane().add(btnCerrarIncidencias);
-		
-		JButton btnRegistrarTrabajo = new JButton("Registrar trabajos");
-
-		btnRegistrarTrabajo.addActionListener(e -> {
-
-		    RegistrarTrabajoView v = new RegistrarTrabajoView();
-		    RegistrarTrabajoModel m = new RegistrarTrabajoModel();
-
-		    RegistrarTrabajoController c = new RegistrarTrabajoController(m, v);
-		    c.initController();
-
-		    v.getFrame().setVisible(true);
-		});
-
-		frame.getContentPane().add(btnRegistrarTrabajo);
-		
-		JButton btnListadoPeriodo = new JButton("Listado incidencias por periodo");
-
-		btnListadoPeriodo.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-
-		        ListadoIncidenciasPeriodoController controller =
-		                new ListadoIncidenciasPeriodoController(
-		                        new ListadoIncidenciasPeriodoModel(),
-		                        new ListadoIncidenciasPeriodoView()
-		                );
-
-		        controller.initController();
-		    }
-		});
-
-		frame.getContentPane().add(btnListadoPeriodo);
-		
-		// Añadir donde creas los demás botones en SwingMain.java
-		JButton btnInformeMensual = new JButton("Informe Mensual (Responsable)");
-		btnInformeMensual.addActionListener(e -> {
-		    InformeMensualView v = new InformeMensualView();
-		    InformeMensualModel m = new InformeMensualModel();
-		    new InformeMensualController(m, v).initController();
-		});
-		frame.getContentPane().add(btnInformeMensual);
-		
-		
-		JButton btnReaperturaIncidencias = new JButton("Reabrir incidencias");
-
-		btnReaperturaIncidencias.addActionListener(e -> {
-		    ReaperturaIncidenciasView v = new ReaperturaIncidenciasView();
-		    ReaperturaIncidenciasModel m = new ReaperturaIncidenciasModel();
-		    new ReaperturaIncidenciasController(m, v).initController();
-		});
-
-		frame.getContentPane().add(btnReaperturaIncidencias);
-	}
+        // ==========================================
+        // PANEL 6: SISTEMA / BASE DE DATOS
+        // ==========================================
+        JPanel panelSistema = crearPanelAgrupado("Sistema / Base de Datos");
+        
+        JButton btnInicializarBaseDeDatos = new JButton("Inicializar BBDD en Blanco");
+        btnInicializarBaseDeDatos.addActionListener(e -> {
+            Database db = new Database();
+            db.createDatabase(false);
+        });
+        
+        JButton btnCargarDatosIniciales = new JButton("Cargar Datos para Pruebas");
+        btnCargarDatosIniciales.addActionListener(e -> {
+            Database db = new Database();
+            db.createDatabase(false);
+            db.loadDatabase();
+        });
+        
+        panelSistema.add(btnInicializarBaseDeDatos);
+        panelSistema.add(btnCargarDatosIniciales);
+        frame.getContentPane().add(panelSistema);
+    }
+	
+	/**
+     * Método auxiliar para crear paneles con bordes titulados y layout vertical.
+     */
+    private JPanel crearPanelAgrupado(String titulo) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new java.awt.GridLayout(0, 1, 5, 5)); // 1 columna, filas dinámicas
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), titulo, TitledBorder.LEFT, TitledBorder.TOP));
+        return panel;
+    }
 
 	public JFrame getFrame() { return this.frame; }
 }
