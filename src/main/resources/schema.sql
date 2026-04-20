@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS Historial;
 DROP TABLE IF EXISTS PresupuestoTipoIncidencia;
+DROP TABLE IF EXISTS Factura;
 DROP TABLE IF EXISTS Incidencia;
 DROP TABLE IF EXISTS Zona;
 DROP TABLE IF EXISTS Persona;
@@ -79,3 +80,16 @@ CREATE TABLE PresupuestoTipoIncidencia (
 CREATE UNIQUE INDEX ux_presupuesto_tipo_activo
 ON PresupuestoTipoIncidencia(tipo)
 WHERE activo = 1;
+
+CREATE TABLE Factura (
+    id_factura INTEGER PRIMARY KEY AUTOINCREMENT,
+    numero_factura TEXT NOT NULL UNIQUE,
+    fecha_emision DATETIME NOT NULL DEFAULT (datetime('now','localtime')),
+    emisor TEXT NOT NULL,
+    detalle TEXT NOT NULL,
+    coste_total REAL NOT NULL CHECK (coste_total >= 0),
+    fk_incidencia INTEGER NOT NULL UNIQUE,
+    fk_operador INTEGER NOT NULL,
+    FOREIGN KEY (fk_incidencia) REFERENCES Incidencia(id_incidencia),
+    FOREIGN KEY (fk_operador) REFERENCES Persona(id_persona)
+);

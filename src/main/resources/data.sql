@@ -2,6 +2,7 @@
 -- LIMPIEZA
 -- =========================
 delete from historial;
+delete from factura;
 delete from incidencia;
 delete from PresupuestoTipoIncidencia;
 delete from zona;
