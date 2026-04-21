@@ -121,18 +121,56 @@ VALUES ('Limpieza','Solicitud de limpieza de una zona privada interior de comuni
 
 -- Historial Incidencia Rechazada
 INSERT INTO Historial (fecha_hora, estado, accion, detalle, fk_incidencia, fk_persona) VALUES
-('2026-03-18 11:40:00', 'NUEVA',      'CREACION',   'La ciudadana registró una solicitud de limpieza', 15, 1),
-('2026-03-18 12:15:00', 'RECHAZADA',  'RECHAZO',    'La operadora rechazó la incidencia por tratarse de un espacio privado fuera del servicio municipal', 15, 4);
+('2026-03-18 11:40:00', 'NUEVA',      'CREACION',   'La ciudadana registró una solicitud de limpieza', 18, 1),
+('2026-03-18 12:15:00', 'RECHAZADA',  'RECHAZO',    'La operadora rechazó la incidencia por tratarse de un espacio privado fuera del servicio municipal', 18, 4);
 
 
 -- Historial Incidencia CERRADA 
 INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) VALUES
-('NUEVA', 'CREACION', 'El ciudadano registró el aviso de graffiti en fachada', 13, 1),
-('VALIDADA', 'VALIDACION', 'La operadora validó la incidencia', 13, 4),
-('ASIGNADA', 'ASIGNACION', 'La operadora asignó la incidencia al técnico Roberto', 13, 4),
-('EN CURSO', 'INICIO_REPARACION', 'El técnico inició la limpieza de la fachada', 13, 5),
-('RESUELTA', 'FINALIZACION', 'El técnico eliminó el graffiti con limpieza a presión', 13, 5),
-('CERRADA', 'CIERRE', 'La operadora cerró la incidencia tras comprobar el resultado', 13, 4);
+('NUEVA', 'CREACION', 'El ciudadano registró el aviso de graffiti en fachada', 16, 1),
+('VALIDADA', 'VALIDACION', 'La operadora validó la incidencia', 16, 4),
+('ASIGNADA', 'ASIGNACION', 'La operadora asignó la incidencia al técnico Roberto', 16, 4),
+('EN CURSO', 'INICIO_REPARACION', 'El técnico inició la limpieza de la fachada', 16, 5),
+('RESUELTA', 'FINALIZACION', 'El técnico eliminó el graffiti con limpieza a presión', 16, 5),
+('CERRADA', 'CIERRE', 'La operadora cerró la incidencia tras comprobar el resultado', 16, 4);
+
+-- Mobiliario urbano
+INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email)
+VALUES
+('ana_mob', 'tech123', 'TECNICO', 'Mobiliario urbano', 'Ana', 'López Ruiz', '44444444A', 'ana.mob@tech.es'),
+('carlos_mob', 'tech123', 'TECNICO', 'Mobiliario urbano', 'Carlos', 'Gómez Pérez', '55555555C', 'carlos.mob@tech.es');
+
+-- Zonas verdes
+INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email)
+VALUES
+('sergio_verde', 'tech123', 'TECNICO', 'Zonas verdes', 'Sergio', 'Molina Gil', '66666666S', 'sergio.verde@tech.es'),
+('lucia_verde', 'tech123', 'TECNICO', 'Zonas verdes', 'Lucía', 'Navarro Díaz', '77777777L', 'lucia.verde@tech.es');
+
+-- Alumbrado
+INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email)
+VALUES
+('diego_luz', 'tech123', 'TECNICO', 'Alumbrado', 'Diego', 'Santos Vega', '88888888D', 'diego.luz@tech.es'),
+('irene_luz', 'tech123', 'TECNICO', 'Alumbrado', 'Irene', 'Castro León', '99999999I', 'irene.luz@tech.es');
+
+-- Limpieza
+INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email)
+VALUES
+('raul_clean', 'tech123', 'TECNICO', 'Limpieza', 'Raúl', 'Ortega Ruiz', '10101010R', 'raul.clean@tech.es'),
+('nuria_clean', 'tech123', 'TECNICO', 'Limpieza', 'Nuria', 'Domínguez Pardo', '20202020N', 'nuria.clean@tech.es');
+
+-- Calzada
+INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email)
+VALUES
+('alberto_calz', 'tech123', 'TECNICO', 'Calzada', 'Alberto', 'Gil Romero', '30303030A', 'alberto.calz@tech.es'),
+('patri_calz', 'tech123', 'TECNICO', 'Calzada', 'Patricia', 'Rey Soto', '40404040P', 'patri.calz@tech.es');
+
+-- VALIDADAS (pocas, para probar asignación)
+INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, fk_ciudadano) VALUES
+('Limpieza', 'Banco con cagadas de paloma', 3, '2026-04-04 09:00:00', 'VALIDADA', 1),
+('Limpieza', 'Plaza con residuos de comida', 4, '2026-04-01 17:00:00', 'VALIDADA', 2),
+('Limpieza', 'Meadas en la puerta de los garajes', 4, '2026-04-07 20:00:00', 'VALIDADA', 2),
+('Limpieza', 'Grafitis en los trenes', 4, '2026-04-10 19:00:00', 'VALIDADA', 2);
+
 
 -- =========================
 -- PRESUPUESTOS (Pruebas Financieras)

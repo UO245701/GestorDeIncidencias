@@ -7,6 +7,8 @@ import java.awt.*;
 
 public class AsignarIncidenciaView extends JFrame {
 
+    private static final long serialVersionUID = 1L;
+
     private JTextField txtEmail;
     private JButton btnLogin;
     private JButton btnAsignar;
@@ -15,12 +17,11 @@ public class AsignarIncidenciaView extends JFrame {
     private JTable tableTecnicos;
 
     public AsignarIncidenciaView() {
-        setTitle("Operador - Asignar incidencia a técnico");
+        setTitle("Operador - Asignar incidencia a uno o varios técnicos");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1150, 620);
         setLocationRelativeTo(null);
 
-        // ===== TOP: Email + login =====
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
         top.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
 
@@ -31,19 +32,25 @@ public class AsignarIncidenciaView extends JFrame {
         btnLogin = new JButton("Login / Cargar");
         top.add(btnLogin);
 
-        // ===== CENTER: tablas con títulos =====
         tableIncidencias = new JTable();
         tableTecnicos = new JTable();
 
         tableIncidencias.setRowHeight(22);
         tableTecnicos.setRowHeight(22);
 
+        tableIncidencias.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableTecnicos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
         JPanel panelIncidencias = new JPanel(new BorderLayout());
-        panelIncidencias.add(new JLabel("Incidencias VALIDADA (ordenadas por fecha, antiguas primero)"), BorderLayout.NORTH);
+        panelIncidencias.add(
+                new JLabel("Incidencias VALIDADA (ordenadas por fecha, antiguas primero)"),
+                BorderLayout.NORTH);
         panelIncidencias.add(new JScrollPane(tableIncidencias), BorderLayout.CENTER);
 
         JPanel panelTecnicos = new JPanel(new BorderLayout());
-        panelTecnicos.add(new JLabel("Técnicos disponibles"), BorderLayout.NORTH);
+        panelTecnicos.add(
+                new JLabel("Técnicos disponibles (selección múltiple)"),
+                BorderLayout.NORTH);
         panelTecnicos.add(new JScrollPane(tableTecnicos), BorderLayout.CENTER);
 
         JPanel center = new JPanel(new GridLayout(1, 2, 10, 10));
@@ -51,7 +58,6 @@ public class AsignarIncidenciaView extends JFrame {
         center.add(panelIncidencias);
         center.add(panelTecnicos);
 
-        // ===== BOTTOM: botón asignar =====
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottom.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         btnAsignar = new JButton("Asignar");
@@ -62,8 +68,6 @@ public class AsignarIncidenciaView extends JFrame {
         add(center, BorderLayout.CENTER);
         add(bottom, BorderLayout.SOUTH);
     }
-
-    // ===== Métodos que usa el controller =====
 
     public String getEmail() {
         return txtEmail.getText();
@@ -88,7 +92,6 @@ public class AsignarIncidenciaView extends JFrame {
     public void setTablaIncidencias(TableModel model) {
         tableIncidencias.setModel(model);
 
-        // Cambiar títulos si existen esas columnas
         if (tableIncidencias.getColumnCount() >= 6) {
             tableIncidencias.getColumnModel().getColumn(0).setHeaderValue("ID");
             tableIncidencias.getColumnModel().getColumn(1).setHeaderValue("Tipo");
@@ -98,7 +101,6 @@ public class AsignarIncidenciaView extends JFrame {
             tableIncidencias.getColumnModel().getColumn(5).setHeaderValue("Ciudadano");
         }
 
-        // Centrar la columna ID
         if (tableIncidencias.getColumnCount() > 0) {
             DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
             centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -120,7 +122,6 @@ public class AsignarIncidenciaView extends JFrame {
             tableTecnicos.getColumnModel().getColumn(4).setHeaderValue("Email");
         }
 
-        // Centrar la columna ID
         if (tableTecnicos.getColumnCount() > 0) {
             DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
             centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);

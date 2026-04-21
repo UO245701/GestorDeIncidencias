@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS Historial;
+DROP TABLE IF EXISTS IncidenciaTecnico;
 DROP TABLE IF EXISTS PresupuestoTipoIncidencia;
 DROP TABLE IF EXISTS Factura;
 DROP TABLE IF EXISTS Incidencia;
@@ -41,6 +42,15 @@ CREATE TABLE Incidencia (
     FOREIGN KEY (fk_ciudadano) REFERENCES Persona(id_persona),
     FOREIGN KEY (fk_tecnico) REFERENCES Persona(id_persona),
     FOREIGN KEY (fk_zona) REFERENCES Zona(id_zona)
+);
+
+CREATE TABLE IncidenciaTecnico (
+    fk_incidencia INTEGER NOT NULL,
+    fk_tecnico INTEGER NOT NULL,
+    fecha_asignacion DATETIME DEFAULT (datetime('now','localtime')),
+    PRIMARY KEY (fk_incidencia, fk_tecnico),
+    FOREIGN KEY (fk_incidencia) REFERENCES Incidencia(id_incidencia),
+    FOREIGN KEY (fk_tecnico) REFERENCES Persona(id_persona)
 );
 
 CREATE TABLE Historial (
