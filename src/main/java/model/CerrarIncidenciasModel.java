@@ -88,4 +88,40 @@ public class CerrarIncidenciasModel {
             db.executeUpdate(historial, id, idTecnico);
         }
     }
+    
+ // 1. Obtener el presupuesto disponible del presupuesto ACTIVO para ese tipo
+    public double getPresupuestoDisponible(String tipoIncidencia) {
+        String sql = "SELECT (importe_maximo - importe_consumido) AS disponible "
+                   + "FROM PresupuestoTipoIncidencia "
+                   + "WHERE tipo = ? AND activo = 1 "
+                   + "AND date('now','localtime') BETWEEN date(fecha_inicio) AND date(fecha_fin)";
+        
+        java.util.List<Object[]> rows = db.executeQueryArray(sql, tipoIncidencia);
+        
+        if (rows.isEmpty() || rows.get(0)[0] == null) {
+            // Si no hay presupuesto activo configurado, asumimos 0 disponible (bloqueará el cierre)
+            return 0.0; 
+        }
+        return Double.parseDouble(rows.get(0)[0].toString());
+    }
+
+    // 2. Método principal para cerrar la incidencia financieramente
+    public void cerrarIncidenciaConCoste(long idIncidencia, String tipoIncidencia, double costeReal, int idResponsable) {
+        
+        // A) Actualizamos la incidencia a CERRADA y le guardamos su coste total
+        String sqlUpdateIncidencia = "UPDATE Incidencia SET estado = 'CERRADA', coste_total = ? WHERE id_incidencia = ?";
+        db.executeUpdate(sqlUpdateIncidencia, costeReal, idIncidencia);
+
+        // B) Sumamos el gasto al importe_consumido del presupuesto activo
+        String sqlUpdatePresupuesto = "UPDATE PresupuestoTipoIncidencia "
+                                    + "SET importe_consumido = importe_consumido + ? "
+                                    + "WHERE tipo = ? AND activo = 1";
+        db.executeUpdate(sqlUpdatePresupuesto, costeReal, tipoIncidencia);
+
+        // C) Registramos el movimiento en el historial
+        String sqlHistorial = "INSERT INTO Historial (fecha_hora, estado, accion, detalle, fk_incidencia, fk_persona) "
+                            + "VALUES (datetime('now','localtime'), 'CERRADA', 'CIERRE', ?, ?, ?)";
+        String detalle = "Cierre validado. Coste imputado: " + costeReal + "€ al presupuesto de " + tipoIncidencia;
+        db.executeUpdate(sqlHistorial, detalle, idIncidencia, idResponsable);
+    }
 }

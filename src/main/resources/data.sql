@@ -4,6 +4,7 @@
 delete from historial;
 delete from IncidenciaTecnico;
 delete from incidencia;
+delete from PresupuestoTipoIncidencia;
 delete from zona;
 delete from persona;
 -- =========================
@@ -61,7 +62,10 @@ INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, coste, f
 
 -- RESUELTA
 INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, coste, fk_ciudadano, fk_tecnico, horas_prevision, trabajos_reparacion, tiempo_real, trabajos_realizados) VALUES
-('Limpieza', 'Grafitis en la fachada del centro cultural', 2, '2026-01-18 16:20:00', 'RESUELTA', 120.0, 1, 5, 5, 'Limpiar y pintar', 7, 'Pintadas eliminadas y pared repintada');
+('Limpieza', 'Grafitis en la fachada del centro cultural', 2, '2026-01-18 16:20:00', 'RESUELTA', 120.0, 1, 5, 5, 'Limpiar y pintar', 7, 'Pintadas eliminadas y pared repintada'),
+('Alumbrado', 'Farol sin luz', 2, '2026-01-18 16:20:00', 'RESUELTA', 120.0, 1, 5, 5, 'Cambiar bombilla', 7, 'Bombilla cambiada'),
+('Calzada', 'Carretera rota', 2, '2026-01-18 16:20:00', 'RESUELTA', 120.0, 1, 5, 5, 'Reparar', 7, 'Reparada y asfaltada'),
+('Limpieza', 'Grafitis en la fachada del centro cultural 2', 2, '2026-01-18 16:20:00', 'RESUELTA', 120.0, 1, 5, 5, 'Limpiar y pintar', 7, 'Pintadas eliminadas y pared repintada');
 
 -- =========================
 -- HISTORIAL
@@ -129,6 +133,7 @@ INSERT INTO Historial (estado, accion, detalle, fk_incidencia, fk_persona) VALUE
 ('RESUELTA', 'FINALIZACION', 'El técnico eliminó el graffiti con limpieza a presión', 13, 5),
 ('CERRADA', 'CIERRE', 'La operadora cerró la incidencia tras comprobar el resultado', 13, 4);
 
+<<<<<<< HEAD
 
 -- =========================
 -- MÁS TÉCNICOS PARA PRUEBAS
@@ -170,3 +175,15 @@ INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, fk_ciuda
 ('Limpieza', 'Plaza con residuos de comida', 4, '2026-04-01 17:00:00', 'VALIDADA', 2),
 ('Limpieza', 'Meadas en la puerta de los garajes', 4, '2026-04-07 20:00:00', 'VALIDADA', 2),
 ('Limpieza', 'Grafitis en los trenes', 4, '2026-04-10 19:00:00', 'VALIDADA', 2);
+
+-- =========================
+-- PRESUPUESTOS (Pruebas Financieras)
+-- Activos desde hace 1 mes hasta dentro de 1 mes
+-- =========================
+INSERT INTO PresupuestoTipoIncidencia (tipo, importe_maximo, importe_consumido, fecha_inicio, fecha_fin, activo) VALUES 
+('Alumbrado', 5000.0, 0.0, date('now', '-1 month'), date('now', '+1 month'), 1),
+('Limpieza', 2000.0, 0.0, date('now', '-1 month'), date('now', '+1 month'), 1),
+('Mobiliario urbano', 3000.0, 0.0, date('now', '-1 month'), date('now', '+1 month'), 1),
+('Zonas verdes', 4000.0, 0.0, date('now', '-1 month'), date('now', '+1 month'), 1),
+('Señalización', 1500.0, 0.0, date('now', '-1 month'), date('now', '+1 month'), 1),
+('Calzada', 10000.0, 0.0, date('now', '-1 month'), date('now', '+1 month'), 1);
