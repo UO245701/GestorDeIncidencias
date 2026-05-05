@@ -59,6 +59,9 @@ import view.PresupuestoTipoIncidenciaView;
 import controller.ExportacionHistorialController;
 import model.ExportacionHistorialModel;
 import view.ExportacionHistorialView;
+import controller.FacturaIncidenciaController;
+import model.FacturaIncidenciaModel;
+import view.FacturaIncidenciaView;
 
 public class SwingMain {
 
@@ -126,9 +129,15 @@ public class SwingMain {
         btnAsignarIncidencia.addActionListener(e -> {
             new AsignarIncidenciaController(new AsignarIncidenciaModel(), new AsignarIncidenciaView()).initController();
         });
+
+        JButton btnFacturas = new JButton("Generar factura de incidencia");
+        btnFacturas.addActionListener(e -> {
+            new FacturaIncidenciaController(new FacturaIncidenciaModel(), new FacturaIncidenciaView()).initController();
+        });
         
         panelOperador.add(btnValidar);
         panelOperador.add(btnAsignarIncidencia);
+        panelOperador.add(btnFacturas);
         frame.getContentPane().add(panelOperador);
 
         // ==========================================
