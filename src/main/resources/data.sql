@@ -4,7 +4,6 @@
 delete from historial;
 delete from IncidenciaTecnico;
 delete from factura;
->>>>>>> branch 'main' of https://github.com/UO245701/GestorDeIncidencias.git
 delete from incidencia;
 delete from PresupuestoTipoIncidencia;
 delete from zona;
@@ -172,48 +171,6 @@ INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, fk_ciuda
 ('Limpieza', 'Meadas en la puerta de los garajes', 4, '2026-04-07 20:00:00', 'VALIDADA', 2),
 ('Limpieza', 'Grafitis en los trenes', 4, '2026-04-10 19:00:00', 'VALIDADA', 2);
 
-
-
--- =========================
--- MÁS TÉCNICOS PARA PRUEBAS
--- =========================
-
--- Mobiliario urbano
-INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email)
-VALUES 
-('ana_mob', 'tech123', 'TECNICO', 'Mobiliario urbano', 'Ana', 'López Ruiz', '44444444A', 'ana.mob@tech.es'),
-('carlos_mob', 'tech123', 'TECNICO', 'Mobiliario urbano', 'Carlos', 'Gómez Pérez', '55555555C', 'carlos.mob@tech.es');
-
--- Zonas verdes
-INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email)
-VALUES 
-('sergio_verde', 'tech123', 'TECNICO', 'Zonas verdes', 'Sergio', 'Molina Gil', '66666666S', 'sergio.verde@tech.es'),
-('lucia_verde', 'tech123', 'TECNICO', 'Zonas verdes', 'Lucía', 'Navarro Díaz', '77777777L', 'lucia.verde@tech.es');
-
--- Alumbrado
-INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email)
-VALUES 
-('diego_luz', 'tech123', 'TECNICO', 'Alumbrado', 'Diego', 'Santos Vega', '88888888D', 'diego.luz@tech.es'),
-('irene_luz', 'tech123', 'TECNICO', 'Alumbrado', 'Irene', 'Castro León', '99999999I', 'irene.luz@tech.es');
-
--- Limpieza
-INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email)
-VALUES 
-('raul_clean', 'tech123', 'TECNICO', 'Limpieza', 'Raúl', 'Ortega Ruiz', '10101010R', 'raul.clean@tech.es'),
-('nuria_clean', 'tech123', 'TECNICO', 'Limpieza', 'Nuria', 'Domínguez Pardo', '20202020N', 'nuria.clean@tech.es');
-
--- Calzada
-INSERT INTO Persona (usuario, contrasena, tipo, tipo_responsable, nombre, apellidos, dni, email)
-VALUES 
-('alberto_calz', 'tech123', 'TECNICO', 'Calzada', 'Alberto', 'Gil Romero', '30303030A', 'alberto.calz@tech.es'),
-('patri_calz', 'tech123', 'TECNICO', 'Calzada', 'Patricia', 'Rey Soto', '40404040P', 'patri.calz@tech.es');
-
--- VALIDADAS (pocas, para probar asignación)
-INSERT INTO Incidencia (tipo, descripcion, fk_zona, fecha_hora, estado, fk_ciudadano) VALUES
-('Limpieza', 'Banco con cagadas de paloma', 3, '2026-04-04 09:00:00', 'VALIDADA', 1),
-('Limpieza', 'Plaza con residuos de comida', 4, '2026-04-01 17:00:00', 'VALIDADA', 2),
-('Limpieza', 'Meadas en la puerta de los garajes', 4, '2026-04-07 20:00:00', 'VALIDADA', 2),
-('Limpieza', 'Grafitis en los trenes', 4, '2026-04-10 19:00:00', 'VALIDADA', 2);
 
 -- =========================
 -- PRESUPUESTOS (Pruebas Financieras)
